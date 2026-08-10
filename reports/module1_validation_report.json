@@ -1,0 +1,18 @@
+{
+  "module": "Module 1: UAV Image Acquisition",
+  "timestamp": "2026-07-14T05:26:27.328997Z",
+  "total": 41,
+  "passed": 39,
+  "failed": 2,
+  "pass_rate": 95,
+  "failed_tests": [
+    {
+      "name": "Resolution score: 1920\u00d71080 \u2192 \u226590",
+      "reason": "Got 75.92"
+    },
+    {
+      "name": "README.md exists and has API section",
+      "reason": "'charmap' codec can't decode byte 0x90 in position 479: character maps to <undefined>"
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+# ==============================================================
+# .gitignore — UAV Construction Progress Monitoring
+# ==============================================================
+
+# ------------------------------------------------------------
+# 1. Environment variables & secrets (NEVER commit these)
+# ------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+
+# ------------------------------------------------------------
+# 2. Python cache & compiled bytecodes
+# ------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# ------------------------------------------------------------
+# 3. Virtual environments
+# ------------------------------------------------------------
+.venv/
+venv/
+ENV/
+env/
+
+# ------------------------------------------------------------
+# 4. IDE & OS system files
+# ------------------------------------------------------------
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*.tmp
+
+# ------------------------------------------------------------
+# 5. Runtime uploads — ALL uploaded image files (personal data)
+#    Keeps the directory structure via .gitkeep only
+# ------------------------------------------------------------
+uploads/**
+!uploads/raw/.gitkeep
+
+# ------------------------------------------------------------
+# 6. Processed pipeline outputs (intermediate/generated files)
+# ------------------------------------------------------------
+processed/**
+!processed/.gitkeep
+
+# ------------------------------------------------------------
+# 7. Runtime logs
+# ------------------------------------------------------------
+logs/**
+!logs/.gitkeep
+*.log
+
+# ------------------------------------------------------------
+# 8. Runtime-generated metadata (contain local machine paths
+#    and personal project data — NEVER commit these)
+# ------------------------------------------------------------
+metadata/*.json
+metadata/**/*.json
+
+# ------------------------------------------------------------
+# 9. Model weight files (large binary files — download locally)
+# ------------------------------------------------------------
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.bin
+models/*.joblib
+models/*.pkl
+models/*.h5
+!models/README.md
+
+# ------------------------------------------------------------
+# 10. Large dataset files (configure paths in .env)
+# ------------------------------------------------------------
+datasets/*.zip
+datasets/*.tar.gz
+datasets/*.tar
+datasets/*.gz
+datasets/**/*.png
+datasets/**/*.jpg
+datasets/**/*.jpeg
+datasets/**/*.txt
+!datasets/README.md
+
+# ------------------------------------------------------------
+# 11. Node / Web modules
+# ------------------------------------------------------------
+node_modules/
+
+# ------------------------------------------------------------
+# 12. Reports — exclude generated/runtime reports,
+#     keep committed validation reports only
+# ------------------------------------------------------------
+reports/*.pdf
+reports/master_validation_report.json

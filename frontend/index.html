@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UAV Vision — Construction Monitor</title>
+  <meta name="description" content="Professional AI-Powered Construction Progress Monitoring Platform — Explainable UAV Drone Imagery Analysis" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+
+<!-- Mobile overlay for sidebar -->
+<div class="mobile-overlay" id="mobile-overlay"></div>
+
+<!-- Drop overlay -->
+<div class="drop-overlay" id="drop-overlay">
+  <div class="drop-overlay-text">⬇ Drop Images Here</div>
+</div>
+
+<div id="app">
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SIDEBAR
+       ═══════════════════════════════════════════════════════════ -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Main navigation">
+    <div class="sidebar-header">
+      <div class="logo">
+        <div class="logo-icon" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+            <path d="M14 2L26 8V20L14 26L2 20V8L14 2Z" stroke="url(#lg1)" stroke-width="1.5" fill="none"/>
+            <circle cx="14" cy="14" r="4" fill="url(#lg1)"/>
+            <defs>
+              <linearGradient id="lg1" x1="2" y1="2" x2="26" y2="26" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#00D4FF"/><stop offset="1" stop-color="#8B6FD4"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">UAV Vision</span>
+          <span class="logo-sub">Construction AI</span>
+        </div>
+      </div>
+      <button class="sidebar-toggle" id="sidebar-toggle"
+              aria-label="Toggle sidebar" aria-expanded="true" aria-controls="sidebar-nav">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M2 3.5h12M2 8h12M2 12.5h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebar-nav" aria-label="Site navigation">
+
+      <!-- ── Level 1: Main Navigation ───────────────────────────── -->
+      <div class="nav-group" role="group" aria-label="Main">
+        <span class="nav-section-label" aria-hidden="true">Main</span>
+
+        <a class="nav-item active" data-page="dashboard" id="nav-dashboard"
+           href="#" tabindex="0" aria-current="page" aria-label="Dashboard">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M3 4a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 8a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H4a1 1 0 01-1-1v-4zm8-8a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V4zm0 8a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/>
+          </svg>
+          <span class="nav-label">Dashboard</span>
+          <span class="nav-tooltip" role="tooltip">Dashboard</span>
+        </a>
+
+        <a class="nav-item" data-page="projects" id="nav-projects"
+           href="#" tabindex="0" aria-label="Projects">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z" clip-rule="evenodd"/>
+            <path d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"/>
+          </svg>
+          <span class="nav-label">Projects</span>
+          <span class="nav-tooltip" role="tooltip">Projects</span>
+        </a>
+
+        <a class="nav-item" data-page="activity" id="nav-activity"
+           href="#" tabindex="0" aria-label="Activity Log">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+          </svg>
+          <span class="nav-label">Activity Log</span>
+          <span class="nav-tooltip" role="tooltip">Activity Log</span>
+        </a>
+      </div>
+
+      <!-- ── Level 2: Project Workspace Submenu ─────────────────── -->
+      <div class="nav-workspace" id="nav-workspace" aria-hidden="true">
+
+        <!-- Workspace context header -->
+        <div class="nav-workspace-header" id="nav-workspace-header">
+          <div class="nav-workspace-context">
+            <span style="font-size: 16px; margin-right: 4px;" aria-hidden="true">🏗️</span>
+            <div class="nav-workspace-info">
+              <span class="nav-workspace-label">Active Project</span>
+              <span class="nav-workspace-name" id="sidebar-project-name">—</span>
+            </div>
+          </div>
+          <button class="nav-workspace-toggle" id="nav-workspace-toggle"
+                  aria-label="Collapse project menu" aria-expanded="true"
+                  aria-controls="nav-workspace-menu">
+            <svg class="wstoggle-chevron" width="13" height="13" viewBox="0 0 13 13"
+                 fill="none" aria-hidden="true">
+              <path d="M2.5 4.5l4 4 4-4" stroke="currentColor" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Workspace sub-items -->
+        <div class="nav-workspace-menu" id="nav-workspace-menu"
+             role="group" aria-label="Project workspace navigation">
+
+          <a class="nav-item nav-item-ws" data-tab="overview" id="ws-nav-overview"
+             href="#" tabindex="0" aria-label="Overview">
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+            </svg>
+            <span class="nav-label">Overview</span>
+            <span class="nav-tooltip" role="tooltip">Overview</span>
+          </a>
+
+          <a class="nav-item nav-item-ws" data-tab="inspections" id="ws-nav-inspections"
+             href="#" tabindex="0" aria-label="Inspections">
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+            </svg>
+            <span class="nav-label">Inspections</span>
+            <span class="nav-tooltip" role="tooltip">Inspections</span>
+            <span class="nav-item-count hidden" id="ws-count-inspections">0</span>
+          </a>
+
+          <a class="nav-item nav-item-ws" data-tab="images" id="ws-nav-images"
+             href="#" tabindex="0" aria-label="Drone Images">
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+            </svg>
+            <span class="nav-label">Drone Images</span>
+            <span class="nav-tooltip" role="tooltip">Drone Images</span>
+            <span class="nav-item-count hidden" id="ws-count-images">0</span>
+          </a>
+
+          <a class="nav-item nav-item-ws" data-tab="analysis" id="ws-nav-analysis"
+             href="#" tabindex="0" aria-label="AI Analysis">
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+            </svg>
+            <span class="nav-label">AI Analysis</span>
+            <span class="nav-tooltip" role="tooltip">AI Analysis</span>
+          </a>
+
+          <a class="nav-item nav-item-ws" data-tab="timeline" id="ws-nav-timeline"
+             href="#" tabindex="0" aria-label="Progress Timeline">
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+            </svg>
+            <span class="nav-label">Progress Timeline</span>
+            <span class="nav-tooltip" role="tooltip">Progress Timeline</span>
+          </a>
+
+          <a class="nav-item nav-item-ws" data-tab="reports" id="ws-nav-reports"
+             href="#" tabindex="0" aria-label="Reports">
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+            </svg>
+            <span class="nav-label">Reports</span>
+            <span class="nav-tooltip" role="tooltip">Reports</span>
+          </a>
+
+          <a class="nav-item nav-item-ws" data-tab="proj-settings" id="ws-nav-settings"
+             href="#" tabindex="0" aria-label="Project Settings">
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"/>
+            </svg>
+            <span class="nav-label">Project Settings</span>
+            <span class="nav-tooltip" role="tooltip">Project Settings</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ── Level 1: Platform section ──────────────────────────── -->
+      <div class="nav-group nav-group-bottom" role="group" aria-label="Platform">
+        <div class="nav-divider" role="separator"></div>
+        <span class="nav-section-label" aria-hidden="true">Platform</span>
+
+        <a class="nav-item" data-page="ai-models" id="nav-ai-models"
+           href="#" tabindex="0" aria-label="AI Models">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M13 7H7v6h6V7z"/>
+            <path fill-rule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2z" clip-rule="evenodd"/>
+          </svg>
+          <span class="nav-label">AI Models</span>
+          <span class="nav-tooltip" role="tooltip">AI Models</span>
+        </a>
+
+        <a class="nav-item" data-page="sys-settings" id="nav-sys-settings"
+           href="#" tabindex="0" aria-label="System Settings">
+          <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+          </svg>
+          <span class="nav-label">System Settings</span>
+          <span class="nav-tooltip" role="tooltip">System Settings</span>
+        </a>
+      </div>
+
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="status-indicator">
+        <span class="status-dot connecting" id="api-status-dot" aria-hidden="true"></span>
+        <span id="api-status-text">Connecting...</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MAIN CONTENT
+       ═══════════════════════════════════════════════════════════ -->
+  <main class="main-content" id="main-content">
+
+    <!-- ── Topbar ──────────────────────────────────────────────── -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+            <rect x="2" y="4" width="16" height="1.5" rx="1"/><rect x="2" y="9.25" width="16" height="1.5" rx="1"/><rect x="2" y="14.5" width="16" height="1.5" rx="1"/>
+          </svg>
+        </button>
+        <div>
+          <h1 class="page-title" id="page-title">Dashboard</h1>
+          <nav class="breadcrumb" id="breadcrumb">
+            <a href="#" onclick="navigate('dashboard')">Home</a>
+            <span class="sep">›</span>
+            <span class="current" id="breadcrumb-current">Dashboard</span>
+          </nav>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">
+          <svg id="theme-icon-dark" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+          </svg>
+          <svg id="theme-icon-light" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="display:none">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+          </svg>
+        </button>
+        <button class="notif-btn" id="notif-btn" title="Notifications">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
+          </svg>
+          <span class="notif-badge hidden" id="notif-badge">0</span>
+        </button>
+        <button class="btn btn-primary btn-sm" id="btn-new-project">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          New Project
+        </button>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         DASHBOARD PAGE
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="page active" id="page-dashboard">
+      <!-- KPI Stats -->
+      <div class="stats-grid" id="dash-stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon cyan"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z" clip-rule="evenodd"/><path d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"/></svg></div>
+          <div class="stat-body"><div class="stat-value" id="dash-total-projects">0</div><div class="stat-label">Total Projects</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg></div>
+          <div class="stat-body"><div class="stat-value" id="dash-total-inspections">0</div><div class="stat-label">Total Inspections</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon amber"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg></div>
+          <div class="stat-body"><div class="stat-value" id="dash-total-images">0</div><div class="stat-label">Images Uploaded</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon purple"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg></div>
+          <div class="stat-body"><div class="stat-value" id="dash-avg-progress">—</div><div class="stat-label">Avg Progress</div></div>
+        </div>
+      </div>
+
+      <!-- Projects Grid + Activity Feed -->
+      <div class="grid-2" style="gap:24px">
+        <div>
+          <div class="section-header">
+            <div><h2 class="section-title" style="font-size:16px">Recent Projects</h2></div>
+            <button class="btn btn-ghost btn-sm" onclick="navigate('projects')">View All →</button>
+          </div>
+          <div id="dash-projects-grid">
+            <div class="empty-state">
+              <div class="empty-icon">🏗️</div>
+              <h3>No Projects Yet</h3>
+              <p>Create your first construction monitoring project to get started.</p>
+              <button class="btn btn-primary" id="btn-create-first">Create Project</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="section-header">
+            <div><h2 class="section-title" style="font-size:16px">Recent Activity</h2></div>
+            <button class="btn btn-ghost btn-sm" onclick="navigate('activity')">View All →</button>
+          </div>
+          <div class="card">
+            <div class="card-body" style="padding:0">
+              <div class="activity-list" id="dash-activity-list">
+                <div class="empty-state" style="padding:32px">
+                  <div class="empty-icon">📋</div>
+                  <p>No recent activity.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PROJECTS LIST PAGE
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-projects">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Projects</h2>
+          <p class="section-sub">Manage all construction monitoring projects</p>
+        </div>
+        <div class="flex gap-8 items-center">
+          <div class="search-wrap">
+            <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/></svg>
+            <input type="text" class="form-input search-input" id="projects-search" placeholder="Search projects..." style="width:240px" />
+          </div>
+          <select class="form-input" id="projects-filter-status" style="width:140px">
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="on-hold">On Hold</option>
+            <option value="completed">Completed</option>
+            <option value="archived">Archived</option>
+          </select>
+          <button class="btn btn-primary" id="btn-new-project-2">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            New Project
+          </button>
+        </div>
+      </div>
+
+      <div class="projects-grid" id="projects-grid">
+        <div class="empty-state" style="grid-column:1/-1">
+          <div class="empty-icon">🏗️</div>
+          <h3>No Projects Found</h3>
+          <p>Create your first project to start monitoring construction progress.</p>
+          <button class="btn btn-primary" onclick="openNewProjectModal()">Create Project</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         PROJECT WORKSPACE PAGE
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-workspace">
+      <!-- Workspace header -->
+      <div class="section-header" style="margin-bottom:16px">
+        <div>
+          <div class="flex items-center gap-8 mb-4">
+            <button class="btn btn-ghost btn-sm" onclick="navigate('projects')" style="padding:4px 8px">← Back</button>
+            <span id="ws-status-badge" class="badge badge-green badge-dot">Active</span>
+          </div>
+          <h2 class="section-title" id="ws-project-name">Project Name</h2>
+          <p class="section-sub" id="ws-project-location">📍 Location</p>
+        </div>
+        <div class="flex gap-8 items-center">
+          <button class="btn btn-secondary btn-sm" onclick="openEditProjectModal()">
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"/></svg>
+            Edit
+          </button>
+          <button class="btn btn-primary btn-sm" id="ws-new-inspection-btn" onclick="openNewInspectionModal()">
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            New Inspection
+          </button>
+        </div>
+      </div>
+
+      <!-- Workspace Tabs -->
+      <div class="workspace-tabs" id="workspace-tabs">
+        <button class="workspace-tab active" data-tab="overview">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg>
+          <span>Overview</span>
+        </button>
+        <button class="workspace-tab" data-tab="inspections">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg>
+          <span>Inspections</span>
+          <span class="tab-count" id="tab-count-inspections">0</span>
+        </button>
+        <button class="workspace-tab" data-tab="images">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg>
+          <span>Drone Images</span>
+          <span class="tab-count" id="tab-count-images">0</span>
+        </button>
+        <button class="workspace-tab" data-tab="analysis">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>
+          <span>AI Analysis</span>
+        </button>
+        <button class="workspace-tab" data-tab="timeline">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+          <span>Timeline</span>
+        </button>
+        <button class="workspace-tab" data-tab="reports">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
+          <span>Reports</span>
+        </button>
+        <button class="workspace-tab" data-tab="proj-settings">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"/></svg>
+          <span>Settings</span>
+        </button>
+      </div>
+
+      <!-- ── TAB: Overview ──────────────────────────────────────── -->
+      <div class="tab-panel active" id="tab-overview">
+        <div class="grid-4 mb-24" id="overview-kpi-grid">
+          <div class="stat-card">
+            <div class="stat-icon cyan"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg></div>
+            <div class="stat-body"><div class="stat-value" id="ov-inspections">0</div><div class="stat-label">Inspections</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon amber"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg></div>
+            <div class="stat-body"><div class="stat-value" id="ov-images">0</div><div class="stat-label">Images</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg></div>
+            <div class="stat-body"><div class="stat-value" id="ov-progress">—</div><div class="stat-label">Progress</div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon purple"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></div>
+            <div class="stat-body"><div class="stat-value" id="ov-risk">—</div><div class="stat-label">Risk Level</div></div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="gap:20px">
+          <!-- Progress gauge -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">Construction Progress</span><span class="badge badge-ghost" id="ov-schedule-badge">—</span></div>
+            <div class="card-body" style="display:flex;align-items:center;gap:24px">
+              <div class="gauge-wrap">
+                <svg width="160" height="100" viewBox="0 0 200 120">
+                  <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="18" stroke-linecap="round"/>
+                  <path id="ov-gauge-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gGrad)" stroke-width="18" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251"/>
+                  <defs><linearGradient id="gGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#8B6FD4"/></linearGradient></defs>
+                  <text id="ov-gauge-text" x="100" y="96" text-anchor="middle" fill="var(--text-primary)" font-size="26" font-weight="800" font-family="Inter">0%</text>
+                  <text x="100" y="112" text-anchor="middle" fill="var(--text-secondary)" font-size="10" font-family="Inter">Progress Score</text>
+                </svg>
+              </div>
+              <div style="flex:1">
+                <div class="detail-row"><span class="detail-key">Delay Prediction</span><span class="detail-val" id="ov-delay">—</span></div>
+                <div class="detail-row"><span class="detail-key">AI Confidence</span><span class="detail-val" id="ov-confidence">—</span></div>
+                <div class="detail-row"><span class="detail-key">Last Inspection</span><span class="detail-val" id="ov-last-inspection">—</span></div>
+                <div class="detail-row"><span class="detail-key">Last Analysis</span><span class="detail-val" id="ov-last-analysis">—</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick actions + info -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">Project Details</span></div>
+            <div class="card-body" style="padding:16px">
+              <div class="detail-row"><span class="detail-key">Description</span><span class="detail-val text-sm" id="ov-description">—</span></div>
+              <div class="detail-row"><span class="detail-key">Location</span><span class="detail-val" id="ov-location">—</span></div>
+              <div class="detail-row"><span class="detail-key">Type</span><span class="detail-val" id="ov-type">—</span></div>
+              <div class="detail-row"><span class="detail-key">Start Date</span><span class="detail-val" id="ov-start-date">—</span></div>
+              <div class="detail-row"><span class="detail-key">Planned Duration</span><span class="detail-val" id="ov-duration">—</span></div>
+              <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" id="ov-status-val">Active</span></div>
+              <div class="mt-16 flex gap-8">
+                <button class="btn btn-primary w-full" onclick="switchTab('analysis')">Run AI Analysis</button>
+                <button class="btn btn-secondary" onclick="switchTab('inspections')">Inspections</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Inspections ───────────────────────────────────── -->
+      <div class="tab-panel" id="tab-inspections">
+        <div class="section-header">
+          <div><h3 style="font-size:15px;font-weight:700">Inspection History</h3></div>
+          <button class="btn btn-primary btn-sm" onclick="openNewInspectionModal()">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            New Inspection
+          </button>
+        </div>
+        <div class="inspection-list" id="inspections-list">
+          <div class="empty-state">
+            <div class="empty-icon">📅</div>
+            <h3>No Inspections Yet</h3>
+            <p>Create your first inspection to start uploading drone images and running AI analysis.</p>
+            <button class="btn btn-primary" onclick="openNewInspectionModal()">Create Inspection</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Drone Images ──────────────────────────────────── -->
+      <div class="tab-panel" id="tab-images">
+        <!-- Active inspection selector -->
+        <div class="card mb-16">
+          <div class="card-body" style="padding:16px">
+            <div class="flex items-center gap-12">
+              <label class="form-label" style="margin:0;white-space:nowrap">Active Inspection:</label>
+              <select class="form-input" id="img-inspection-select" style="flex:1;max-width:400px">
+                <option value="">— Select an inspection first —</option>
+              </select>
+              <button class="btn btn-ghost btn-sm" onclick="openNewInspectionModal()">+ New Inspection</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="img-upload-area" class="card mb-16 hidden">
+          <div class="card-header">
+            <span class="card-title">Upload Drone Images</span>
+            <span class="badge badge-ghost">JPG · PNG · TIFF</span>
+          </div>
+          <div class="card-body">
+            <div class="upload-zone" id="upload-zone">
+              <svg class="upload-icon" viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="30" stroke="url(#ug1)" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <path d="M32 42V22M22 32l10-10 10 10" stroke="url(#ug1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <defs><linearGradient id="ug1" x1="2" y1="2" x2="62" y2="62" gradientUnits="userSpaceOnUse"><stop stop-color="#00D4FF"/><stop offset="1" stop-color="#8B6FD4"/></linearGradient></defs>
+              </svg>
+              <p class="upload-primary">Drop UAV images here</p>
+              <p class="upload-secondary">or click to browse files</p>
+              <p class="upload-hint">Supports JPG, JPEG, PNG, TIFF · Max 100 MB per file</p>
+              <input type="file" id="file-input" multiple accept=".jpg,.jpeg,.png,.tiff,.tif" class="file-input-hidden" />
+              <button class="btn btn-secondary btn-sm mt-12" onclick="document.getElementById('file-input').click()">Browse Files</button>
+            </div>
+
+            <div class="file-queue" id="file-queue" style="display:none">
+              <div class="file-queue-header">
+                <span id="queue-count">0 files selected</span>
+                <button class="btn btn-ghost btn-sm" id="btn-clear-queue">Clear</button>
+              </div>
+              <div id="file-list" class="file-list"></div>
+            </div>
+
+            <div id="upload-controls" style="display:none;margin-top:16px">
+              <div id="upload-progress" style="display:none;margin-bottom:16px">
+                <div class="progress-bar-track mb-8"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+                <div style="font-size:12px;color:var(--text-secondary);text-align:center" id="upload-progress-label">Uploading...</div>
+              </div>
+              <button class="btn btn-primary w-full" id="btn-upload">
+                <svg width="15" height="15" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>
+                Upload & Validate Images
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quality validation results -->
+        <div id="quality-results-card" class="card mb-16 hidden">
+          <div class="card-header"><span class="card-title">Image Quality Validation</span><span class="badge badge-green" id="quality-overall-badge">—</span></div>
+          <div class="card-body" id="quality-checks-content"></div>
+        </div>
+
+        <!-- Image gallery -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Uploaded Images</span>
+            <div class="filter-group">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="accepted">Accepted</button>
+              <button class="filter-btn" data-filter="rejected">Rejected</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="gallery-grid" id="images-gallery">
+              <div class="empty-state" style="grid-column:1/-1">
+                <div class="empty-icon">🖼️</div>
+                <p>Upload drone images to see them here.</p>
+              </div>
+            </div>
+            <div class="pagination" id="images-pagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: AI Analysis ───────────────────────────────────── -->
+      <div class="tab-panel" id="tab-analysis">
+        <!-- Select inspection -->
+        <div class="card mb-16">
+          <div class="card-body" style="padding:16px">
+            <div class="flex items-center gap-12">
+              <label class="form-label" style="margin:0;white-space:nowrap">Analyze Inspection:</label>
+              <select class="form-input" id="analysis-inspection-select" style="flex:1;max-width:400px">
+                <option value="">— Select inspection —</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analysis config card -->
+        <div class="card mb-16" id="analysis-config-card">
+          <div class="card-header"><span class="card-title">⚙️ Analysis Configuration</span></div>
+          <div class="card-body">
+            <div class="grid-3" style="gap:12px;margin-bottom:16px">
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Planned Duration (days)</label>
+                <input type="number" class="form-input" id="cfg-planned-duration" value="365" min="30" max="3650" />
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Project Start Date</label>
+                <input type="date" class="form-input" id="cfg-start-date" />
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Max Images per Module</label>
+                <input type="number" class="form-input" id="cfg-limit" value="10" min="1" max="20" />
+              </div>
+            </div>
+            <div class="grid-4" style="gap:12px;margin-bottom:20px">
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Change Weight (%)</label>
+                <input type="number" class="form-input" id="cfg-w-change" value="40" min="0" max="100" />
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Activity Weight (%)</label>
+                <input type="number" class="form-input" id="cfg-w-activity" value="30" min="0" max="100" />
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Temporal Weight (%)</label>
+                <input type="number" class="form-input" id="cfg-w-temporal" value="20" min="0" max="100" />
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label">Quality Weight (%)</label>
+                <input type="number" class="form-input" id="cfg-w-quality" value="10" min="0" max="100" />
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg w-full" id="btn-run-analysis">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+              Run Complete AI Analysis Pipeline
+            </button>
+          </div>
+        </div>
+
+        <!-- Pipeline stepper -->
+        <div class="pipeline-stepper" id="analysis-stepper" style="display:none">
+          <div class="pipeline-step" id="pstep-preprocessing">
+            <div class="pstep-circle">🔬</div>
+            <div class="pstep-label">Preprocessing</div>
+            <div class="pstep-status">—</div>
+          </div>
+          <div class="pipeline-step" id="pstep-detection">
+            <div class="pstep-circle">🔍</div>
+            <div class="pstep-label">Detection</div>
+            <div class="pstep-status">—</div>
+          </div>
+          <div class="pipeline-step" id="pstep-change">
+            <div class="pstep-circle">🗺️</div>
+            <div class="pstep-label">Change Det.</div>
+            <div class="pstep-status">—</div>
+          </div>
+          <div class="pipeline-step" id="pstep-prediction">
+            <div class="pstep-circle">📊</div>
+            <div class="pstep-label">Prediction</div>
+            <div class="pstep-status">—</div>
+          </div>
+          <div class="pipeline-step" id="pstep-xai">
+            <div class="pstep-circle">🧠</div>
+            <div class="pstep-label">XAI</div>
+            <div class="pstep-status">—</div>
+          </div>
+        </div>
+
+        <!-- Analysis results -->
+        <div class="analysis-results" id="analysis-results" style="display:none">
+          <!-- Progress & Delay -->
+          <div class="result-card">
+            <div class="result-card-header">
+              <div class="result-card-icon">📊</div>
+              <div><div class="result-card-title">Progress & Schedule</div><div class="result-card-sub">Construction progress estimation and delay prediction</div></div>
+              <span class="badge badge-green result-card-status" id="res-schedule-badge">—</span>
+            </div>
+            <div class="result-card-body">
+              <div class="kpi-row">
+                <div class="kpi-card"><div class="kpi-value text-cyan" id="res-progress">—</div><div class="kpi-label">Progress Score</div></div>
+                <div class="kpi-card"><div class="kpi-value" id="res-delay">—</div><div class="kpi-label">Delay Prediction</div></div>
+                <div class="kpi-card"><div class="kpi-value" id="res-confidence">—</div><div class="kpi-label">AI Confidence</div></div>
+                <div class="kpi-card"><div class="kpi-value" id="res-risk">—</div><div class="kpi-label">Risk Level</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Activity Detection -->
+          <div class="result-card">
+            <div class="result-card-header">
+              <div class="result-card-icon">🔍</div>
+              <div><div class="result-card-title">Activity Detection</div><div class="result-card-sub">Workers, vehicles, machinery & safety compliance</div></div>
+              <span class="badge badge-cyan result-card-status" id="res-detect-badge">—</span>
+            </div>
+            <div class="result-card-body">
+              <div class="kpi-row">
+                <div class="kpi-card"><div class="kpi-value text-cyan" id="res-detections">—</div><div class="kpi-label">Total Detections</div></div>
+                <div class="kpi-card"><div class="kpi-value text-green" id="res-compliance">—</div><div class="kpi-label">Safety Compliance</div></div>
+                <div class="kpi-card"><div class="kpi-value" id="res-detect-images">—</div><div class="kpi-label">Images Analyzed</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Change Detection -->
+          <div class="result-card">
+            <div class="result-card-header">
+              <div class="result-card-icon">🗺️</div>
+              <div><div class="result-card-title">Change Detection</div><div class="result-card-sub">Construction changes between inspections</div></div>
+              <span class="badge badge-amber result-card-status" id="res-change-badge">—</span>
+            </div>
+            <div class="result-card-body">
+              <div class="kpi-row">
+                <div class="kpi-card"><div class="kpi-value text-amber" id="res-avg-change">—</div><div class="kpi-label">Avg Change</div></div>
+                <div class="kpi-card"><div class="kpi-value" id="res-pairs-analyzed">—</div><div class="kpi-label">Pairs Analyzed</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- XAI -->
+          <div class="result-card">
+            <div class="result-card-header">
+              <div class="result-card-icon">🧠</div>
+              <div><div class="result-card-title">Explainable AI</div><div class="result-card-sub">GradCAM heatmaps and SHAP feature importance</div></div>
+              <span class="badge badge-purple result-card-status" id="res-xai-badge">—</span>
+            </div>
+            <div class="result-card-body">
+              <div class="heatmap-grid" id="res-heatmap-grid">
+                <p class="text-muted text-sm">Heatmaps generated after analysis completes.</p>
+              </div>
+              <div class="mt-12 flex gap-8">
+                <a class="btn btn-secondary btn-sm" id="res-download-report" href="#" target="_blank">📥 Download XAI Report (HTML)</a>
+                <button class="btn btn-ghost btn-sm" id="res-view-shap" onclick="switchTab('reports')">View Full Report →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empty -->
+        <div id="analysis-empty" class="empty-state">
+          <div class="empty-icon">🤖</div>
+          <h3>No Analysis Yet</h3>
+          <p>Select an inspection and click "Run Complete AI Analysis Pipeline" to start.</p>
+        </div>
+      </div>
+
+      <!-- ── TAB: Timeline ──────────────────────────────────────── -->
+      <div class="tab-panel" id="tab-timeline">
+        <div class="grid-2" style="gap:20px">
+          <!-- S-Curve Chart -->
+          <div class="card" style="grid-column:span 2">
+            <div class="card-header">
+              <span class="card-title">S-Curve: Planned vs Actual Progress</span>
+              <div class="chart-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:#00D4FF"></div>Planned</div>
+                <div class="legend-item"><div class="legend-dot" style="background:#F59E0B"></div>Actual</div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-wrap"><canvas id="timeline-scurve-chart" height="80"></canvas></div>
+              <div id="timeline-empty" class="empty-state" style="padding:32px">
+                <div class="empty-icon">📈</div>
+                <p>Run AI Analysis to generate the S-curve visualization.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Milestone timeline -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">🏗️ Construction Milestones</span></div>
+            <div class="card-body">
+              <div class="timeline" id="milestone-timeline">
+                <div class="empty-state" style="padding:24px"><p>Run analysis to see milestones.</p></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inspection history -->
+          <div class="card">
+            <div class="card-header"><span class="card-title">📅 Inspection Timeline</span></div>
+            <div class="card-body">
+              <div class="timeline" id="inspection-timeline">
+                <div class="empty-state" style="padding:24px"><p>No inspections yet.</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Reports ───────────────────────────────────────── -->
+      <div class="tab-panel" id="tab-reports">
+        <div id="reports-list">
+          <div class="empty-state">
+            <div class="empty-icon">📄</div>
+            <h3>No Reports Yet</h3>
+            <p>Run AI Analysis to automatically generate inspection reports.</p>
+            <button class="btn btn-primary" onclick="switchTab('analysis')">Run Analysis</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Project Settings ──────────────────────────────── -->
+      <div class="tab-panel" id="tab-proj-settings">
+        <div class="card" style="max-width:600px">
+          <div class="card-header"><span class="card-title">Project Settings</span></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Project Name *</label>
+              <input type="text" class="form-input" id="proj-settings-name" placeholder="Project name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <textarea class="form-input form-textarea" id="proj-settings-desc" placeholder="Project description..."></textarea>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Location</label>
+                <input type="text" class="form-input" id="proj-settings-location" placeholder="City, State" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Project Type</label>
+                <select class="form-input" id="proj-settings-type">
+                  <option value="residential">Residential</option>
+                  <option value="commercial">Commercial</option>
+                  <option value="infrastructure">Infrastructure</option>
+                  <option value="industrial">Industrial</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Start Date</label>
+                <input type="date" class="form-input" id="proj-settings-start" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Planned Duration (days)</label>
+                <input type="number" class="form-input" id="proj-settings-duration" placeholder="365" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Client</label>
+                <input type="text" class="form-input" id="proj-settings-client" placeholder="Client name" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Contractor</label>
+                <input type="text" class="form-input" id="proj-settings-contractor" placeholder="Contractor name" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-input" id="proj-settings-status">
+                <option value="active">Active</option>
+                <option value="on-hold">On Hold</option>
+                <option value="completed">Completed</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+            <div class="flex gap-8" style="margin-top:8px">
+              <button class="btn btn-primary" id="btn-save-proj-settings">Save Changes</button>
+              <button class="btn btn-danger btn-sm" onclick="confirmDeleteProject()" style="margin-left:auto">Delete Project</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ACTIVITY LOG PAGE
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-activity">
+      <div class="section-header">
+        <div><h2 class="section-title">Activity Log</h2><p class="section-sub">Full event history across all projects</p></div>
+        <button class="btn btn-ghost btn-sm" onclick="loadActivityLog()">↻ Refresh</button>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Recent Events</span>
+          <div class="flex gap-8">
+            <select class="form-input" id="activity-filter-project" style="width:200px">
+              <option value="">All Projects</option>
+            </select>
+          </div>
+        </div>
+        <div class="activity-list" id="activity-full-list" style="padding:0 20px">
+          <div class="empty-state" style="padding:48px"><div class="empty-icon">📋</div><p>No activity recorded yet.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         AI MODELS PAGE (preserved original module pages)
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-ai-models">
+      <div class="section-header">
+        <div><h2 class="section-title">AI Model Datasets</h2><p class="section-sub">Manage training datasets and run module-level operations</p></div>
+      </div>
+
+      <!-- Sub-tabs for the original module pages -->
+      <div class="workspace-tabs mb-24" id="ai-model-tabs">
+        <button class="workspace-tab active" data-aitab="levir">LEVIR-CD Dataset</button>
+        <button class="workspace-tab" data-aitab="roboflow">Roboflow Dataset</button>
+        <button class="workspace-tab" data-aitab="processing">Image Processing</button>
+        <button class="workspace-tab" data-aitab="logs">System Logs</button>
+      </div>
+
+      <!-- LEVIR-CD -->
+      <div class="tab-panel active" id="aitab-levir">
+        <div class="stats-grid" style="margin-bottom:20px">
+          <div class="stat-card"><div class="stat-icon cyan"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg></div><div class="stat-body"><div class="stat-value" id="levir-stat-total">—</div><div class="stat-label">Total Pairs</div></div></div>
+          <div class="stat-card"><div class="stat-icon green"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg></div><div class="stat-body"><div class="stat-value" id="levir-stat-train">—</div><div class="stat-label">Train Pairs</div></div></div>
+          <div class="stat-card"><div class="stat-icon amber"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/></svg></div><div class="stat-body"><div class="stat-value" id="levir-stat-val">—</div><div class="stat-label">Val Pairs</div></div></div>
+          <div class="stat-card"><div class="stat-icon purple"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5z"/></svg></div><div class="stat-body"><div class="stat-value" id="levir-stat-test">—</div><div class="stat-label">Test Pairs</div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div class="filter-group">
+              <button class="filter-btn active" data-split="train" onclick="setLevirSplit('train',this)">Train</button>
+              <button class="filter-btn" data-split="val" onclick="setLevirSplit('val',this)">Val</button>
+              <button class="filter-btn" data-split="test" onclick="setLevirSplit('test',this)">Test</button>
+            </div>
+            <div class="flex gap-8">
+              <button class="btn btn-ghost btn-sm" onclick="loadLevirDataset()">🔄 Refresh</button>
+              <button class="btn btn-primary btn-sm" onclick="processLevirBatch()">⚡ Process Batch</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="gallery-grid" id="levir-pairs-grid">
+              <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🗂️</div><p>Click Refresh to load LEVIR-CD pairs</p></div>
+            </div>
+            <div class="pagination" id="levir-pagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roboflow -->
+      <div class="tab-panel" id="aitab-roboflow">
+        <div class="grid-2 mb-16">
+          <div class="card"><div class="card-header"><span class="card-title">📊 Dataset Statistics</span></div><div class="card-body" id="roboflow-stats"><div class="empty-state" style="padding:24px"><p>Click Refresh to load</p></div></div></div>
+          <div class="card"><div class="card-header"><span class="card-title">🎯 Class Distribution</span></div><div class="card-body" id="roboflow-classes"><div class="empty-state" style="padding:24px"><p>Click Refresh to load</p></div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">🖼️ Image Browser</span>
+            <div class="flex gap-8">
+              <div class="filter-group">
+                <button class="filter-btn active" data-rsplit="train" onclick="setRoboSplit('train',this)">Train</button>
+                <button class="filter-btn" data-rsplit="valid" onclick="setRoboSplit('valid',this)">Valid</button>
+                <button class="filter-btn" data-rsplit="test" onclick="setRoboSplit('test',this)">Test</button>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="loadRoboflowDataset()">🔄 Refresh</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="gallery-grid" id="roboflow-images-grid">
+              <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🏗️</div><p>Click Refresh to load images</p></div>
+            </div>
+            <div class="pagination" id="roboflow-pagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Processing -->
+      <div class="tab-panel" id="aitab-processing">
+        <div class="grid-2 mb-16">
+          <div class="card">
+            <div class="card-header"><span class="card-title">UAV Image Processing</span></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Select Project</label>
+                <select class="form-input" id="m2-project-select"></select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Max Images to Process</label>
+                <input class="form-input" type="number" id="m2-limit" value="10" min="1" max="50" />
+              </div>
+              <button class="btn btn-primary w-full" onclick="runUAVProcessing()">▶ Process UAV Images</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">LEVIR-CD Pair Processing</span></div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Split</label>
+                <select class="form-input" id="levir-process-split">
+                  <option value="train">Train (445 pairs)</option>
+                  <option value="val">Validation</option>
+                  <option value="test">Test</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Pairs to Process (max 10)</label>
+                <input class="form-input" type="number" id="levir-process-limit" value="3" min="1" max="10" />
+              </div>
+              <button class="btn btn-primary w-full" onclick="runLevirProcessing()">▶ Process LEVIR Pairs</button>
+            </div>
+          </div>
+        </div>
+        <div class="card" id="m2-results-card">
+          <div class="card-header"><span class="card-title">Processing Results</span></div>
+          <div class="card-body" id="m2-results-content">
+            <div class="empty-state"><div class="empty-icon">🔬</div><p>Run the processing pipeline to see feature maps here</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logs -->
+      <div class="tab-panel" id="aitab-logs">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">System Logs</span>
+            <div class="flex gap-8">
+              <button class="btn btn-ghost btn-sm" id="btn-refresh-logs">↻ Refresh</button>
+              <button class="btn btn-ghost btn-sm" id="btn-clear-logs-view">Clear View</button>
+            </div>
+          </div>
+          <div class="card-body" style="padding:0">
+            <div class="log-terminal" id="log-terminal"><div style="color:var(--text-muted)">Loading logs...</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         SYSTEM SETTINGS PAGE
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="page" id="page-sys-settings">
+      <div class="section-header">
+        <div><h2 class="section-title">System Settings</h2><p class="section-sub">Application configuration and preferences</p></div>
+      </div>
+      <div class="card" style="max-width:600px">
+        <div class="card-header"><span class="card-title">API & Server</span></div>
+        <div class="card-body">
+          <div class="detail-row"><span class="detail-key">Backend URL</span><span class="detail-val text-sm" id="sys-api-url"></span></div>
+          <div class="detail-row"><span class="detail-key">API Version</span><span class="detail-val">v1</span></div>
+          <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" id="sys-api-status">Checking...</span></div>
+          <div class="mt-12"><button class="btn btn-secondary btn-sm" onclick="checkAPIHealth()">Check Connection</button></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     NOTIFICATION PANEL
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="notif-panel" id="notif-panel">
+  <div class="notif-panel-header">
+    <span class="notif-panel-title">Notifications</span>
+    <button class="btn btn-ghost btn-sm" onclick="closeNotifPanel()">✕</button>
+  </div>
+  <div class="notif-list" id="notif-list">
+    <div class="notif-empty">No notifications yet</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MODALS
+     ═══════════════════════════════════════════════════════════════ -->
+
+<!-- New / Edit Project Modal -->
+<div class="modal-overlay hidden" id="modal-project">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-project-title">Create New Project</h3>
+      <button class="modal-close" onclick="closeModal('modal-project')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="modal-project-id" value="" />
+      <div class="form-group">
+        <label class="form-label">Project Name *</label>
+        <input type="text" id="modal-project-name" class="form-input" placeholder="e.g. Building-A Site Survey" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea id="modal-project-description" class="form-input form-textarea" placeholder="Brief description of the construction site..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Location</label>
+          <input type="text" id="modal-project-location" class="form-input" placeholder="e.g. Chennai, Tamil Nadu" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Project Type</label>
+          <select id="modal-project-type" class="form-input">
+            <option value="residential">Residential</option>
+            <option value="commercial">Commercial</option>
+            <option value="infrastructure">Infrastructure</option>
+            <option value="industrial">Industrial</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Start Date</label>
+          <input type="date" id="modal-project-start" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Planned Duration (days)</label>
+          <input type="number" id="modal-project-duration" class="form-input" placeholder="365" value="365" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Client</label>
+          <input type="text" id="modal-project-client" class="form-input" placeholder="Client name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Contractor</label>
+          <input type="text" id="modal-project-contractor" class="form-input" placeholder="Contractor name" />
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-project')">Cancel</button>
+      <button class="btn btn-primary" id="btn-save-project">Create Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- New Inspection Modal -->
+<div class="modal-overlay hidden" id="modal-inspection">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Create New Inspection</h3>
+      <button class="modal-close" onclick="closeModal('modal-inspection')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Inspection Name</label>
+        <input type="text" id="modal-insp-name" class="form-input" placeholder="e.g. Week 12 Drone Survey" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Inspection Date *</label>
+          <input type="date" id="modal-insp-date" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Weather Conditions</label>
+          <select id="modal-insp-weather" class="form-input">
+            <option value="clear">Clear</option>
+            <option value="partly-cloudy">Partly Cloudy</option>
+            <option value="overcast">Overcast</option>
+            <option value="rainy">Rainy</option>
+            <option value="windy">Windy</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Inspector Name</label>
+        <input type="text" id="modal-insp-inspector" class="form-input" placeholder="Inspector full name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description / Notes</label>
+        <textarea id="modal-insp-desc" class="form-input form-textarea" placeholder="Any site observations or context..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-inspection')">Cancel</button>
+      <button class="btn btn-primary" id="btn-save-inspection">Create Inspection</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div class="modal-overlay hidden" id="modal-confirm">
+  <div class="modal confirm-dialog">
+    <div class="modal-body">
+      <div class="confirm-icon" id="confirm-icon">⚠️</div>
+      <div class="confirm-title" id="confirm-title">Confirm Action</div>
+      <div class="confirm-desc" id="confirm-desc">Are you sure you want to proceed?</div>
+    </div>
+    <div class="modal-footer" style="justify-content:center;gap:16px">
+      <button class="btn btn-ghost" onclick="closeModal('modal-confirm')">Cancel</button>
+      <button class="btn btn-danger" id="btn-confirm-action">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Image Detail Modal -->
+<div class="modal-overlay hidden" id="modal-image">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 class="modal-title" id="img-detail-title">Image Detail</h3>
+      <button class="modal-close" onclick="closeModal('modal-image')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="detail-grid">
+        <div class="detail-image-wrap"><img id="img-detail-src" src="" alt="UAV Image" class="detail-image" /></div>
+        <div class="detail-meta" id="img-detail-meta"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Report Viewer Modal -->
+<div class="modal-overlay hidden" id="modal-report">
+  <div class="modal modal-xl">
+    <div class="modal-header">
+      <h3 class="modal-title" id="report-modal-title">Inspection Report</h3>
+      <div class="flex gap-8">
+        <a class="btn btn-secondary btn-sm" id="btn-download-report-html" href="#" target="_blank">📥 HTML</a>
+        <button class="modal-close" onclick="closeModal('modal-report')">✕</button>
+      </div>
+    </div>
+    <div class="modal-body" id="report-modal-body" style="max-height:70vh;overflow-y:auto">
+      <div class="empty-state"><div class="empty-icon">📄</div><p>Loading report...</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toast-container"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
