@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 1: Temporal Image Ordering
-IEEE M.Tech Project — UAV Image Acquisition
+Final Year Project — UAV Image Acquisition
 
 Handles chronological sorting of UAV images based on:
   1. EXIF DateTimeOriginal metadata

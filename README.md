@@ -172,38 +172,40 @@ uav-construction-progress-monitoring/
 
 ---
 
-## ⚡ Quick Start & Installation
+## ⚡ Quick Start & Running Options
 
 ### 1. Prerequisites
-- Python 3.9+ (Python 3.13 recommended)
-- Git
-
-### 2. Setup Environment & Install Dependencies
-```bash
-git clone https://github.com/your-username/uav-construction-progress-monitoring.git
-cd uav-construction-progress-monitoring
-py install_deps.py
-```
-
-### 3. Configure Environment Variables
-Copy `.env.example` to `.env`:
-```bash
-cp .env.example .env
-```
+- Python 3.9+ (Python 3.10–3.13 supported)
+- Modern Web Browser (Chrome, Edge, Firefox)
 
 ---
 
-## 🚀 How to Run
+### 🚀 Running the System
 
-### Start the Decision-Support System Server
-Run the Flask server:
-```bash
-py backend/app.py
-```
-Access the web dashboard at:
-👉 **`http://localhost:5000/`**
+#### Option A: One-Click Launch (Windows Batch)
+- **First-time Setup & Launch**: Double-click [`setup_and_run.bat`](file:///c:/Users/asus/Desktop/FINAL%20PROJECT/setup_and_run.bat) (installs dependencies, prepares folders, validates system, and opens the browser dashboard).
+- **Subsequent Runs**: Double-click [`run_server.bat`](file:///c:/Users/asus/Desktop/FINAL%20PROJECT/run_server.bat).
+- **Run All Tests**: Double-click [`run_tests.bat`](file:///c:/Users/asus/Desktop/FINAL%20PROJECT/run_tests.bat).
 
-### Run Automated Test Suite
-```bash
-py validate_all.py
+#### Option B: Interactive PowerShell Launcher
+Open PowerShell in the project directory and run:
+```powershell
+.\run.ps1
 ```
+
+#### Option C: Manual Terminal Execution
+1. Install dependencies & initialize environment:
+   ```bash
+   py install_deps.py
+   ```
+2. Start the Flask server:
+   ```bash
+   py backend/app.py
+   ```
+3. Open browser dashboard:
+   👉 **`http://localhost:5000/`**
+
+4. Run all validation tests:
+   ```bash
+   py validate_all.py
+   ```

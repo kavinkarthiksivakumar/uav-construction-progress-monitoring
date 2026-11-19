@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 1: Image Upload Handler
-IEEE M.Tech Project — UAV Image Acquisition
+Final Year Project — UAV Image Acquisition
 
 Manages:
   - Receiving uploaded files from the Flask API
@@ -15,7 +15,7 @@ import json
 import logging
 import shutil
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 
@@ -107,7 +107,7 @@ def process_single_image(
     """
     cfg        = config or {}
     image_id   = str(uuid.uuid4())
-    started_at = datetime.utcnow().isoformat() + "Z"
+    started_at = datetime.now(timezone.utc).isoformat()
 
     record: Dict[str, Any] = {
         "image_id":      image_id,
@@ -137,7 +137,7 @@ def process_single_image(
 
     if not validation["valid"]:
         record["status"] = "rejected_validation"
-        record["completed_at"] = datetime.utcnow().isoformat() + "Z"
+        record["completed_at"] = datetime.now(timezone.utc).isoformat()
         logger.warning("[%s] Rejected at validation: %s", image_id[:8], validation["errors"])
         return record
 
@@ -196,7 +196,7 @@ def process_single_image(
             image_id[:8], record.get("quality_score", 0)
         )
 
-    record["completed_at"] = datetime.utcnow().isoformat() + "Z"
+    record["completed_at"] = datetime.now(timezone.utc).isoformat()
     return record
 
 
@@ -234,7 +234,7 @@ def process_upload_batch(
     project_dir.mkdir(parents=True, exist_ok=True)
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    batch_started = datetime.utcnow().isoformat() + "Z"
+    batch_started = datetime.now(timezone.utc).isoformat()
     seen_hashes: Dict[str, str] = {}
     image_records: List[Dict]   = []
 
@@ -296,7 +296,7 @@ def process_upload_batch(
     result = {
         "project_id":      project_id,
         "batch_started":   batch_started,
-        "batch_completed": datetime.utcnow().isoformat() + "Z",
+        "batch_completed": datetime.now(timezone.utc).isoformat(),
         "total_uploaded":  total,
         "processed":       processed,
         "rejected":        rejected,

@@ -1,6 +1,6 @@
 """
 Module 1 Automated Tests
-IEEE M.Tech Project: UAV Image Acquisition
+Final Year Project: UAV Image Acquisition
 
 Tests:
   1. Project creation
@@ -23,13 +23,20 @@ import tempfile
 import shutil
 import logging
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 
 import numpy as np
 
 # ── Path setup ─────────────────────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 # ─────────────────────────────────────────────────────────────────
 # Test Helpers
@@ -414,37 +421,35 @@ print(f"{BOLD}  Section 6: Flask API (Unit-level){RESET}")
 print(f"{BOLD}{'='*55}{RESET}")
 
 try:
-    import requests
-    BASE = "http://localhost:5000/api/v1"
+    from backend.app import app
+    app.config["TESTING"] = True
+    client = app.test_client()
 
     @test("Health endpoint returns 200")
     def _():
-        r = requests.get(f"{BASE}/health", timeout=3)
+        r = client.get("/api/v1/health")
         assert r.status_code == 200
-        data = r.json()
+        data = r.get_json()
         assert data["success"] is True
 
     @test("Create project returns 201")
     def _():
-        r = requests.post(f"{BASE}/projects",
-                          json={"name": "Test Project", "description": "Auto test"},
-                          timeout=3)
+        r = client.post("/api/v1/projects",
+                        json={"name": "Test Project", "description": "Auto test"})
         assert r.status_code == 201
-        data = r.json()
+        data = r.get_json()
         assert data["success"]
         assert data["data"]["project_id"]
 
     @test("List projects returns array")
     def _():
-        r = requests.get(f"{BASE}/projects", timeout=3)
+        r = client.get("/api/v1/projects")
         assert r.status_code == 200
-        data = r.json()
+        data = r.get_json()
         assert "projects" in data["data"]
 
-except ImportError:
-    print(f"  {YELLOW}⚠{RESET}  requests not installed — skipping Flask API tests")
 except Exception as e:
-    print(f"  {YELLOW}⚠{RESET}  Flask API tests skipped (server not running): {e}")
+    print(f"  {YELLOW}⚠{RESET}  Flask test_client failed: {e}")
 
 # ─────────────────────────────────────────────────────────────────
 # Cleanup
@@ -477,7 +482,7 @@ print(f"{BOLD}{'='*55}{RESET}\n")
 # Save report
 report = {
     "module":      "Module 1: UAV Image Acquisition",
-    "timestamp":   datetime.utcnow().isoformat() + "Z",
+    "timestamp":   datetime.now(timezone.utc).isoformat(),
     "total":       total,
     "passed":      passed,
     "failed":      failed,

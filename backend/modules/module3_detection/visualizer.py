@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 3: Detection Visualizer
-IEEE M.Tech Project — Construction Activity Detection
+Final Year Project — Construction Activity Detection
 
 Renders bounding boxes and class labels on images for visual inspection.
 Produces annotated PNG files saved alongside the detection JSON results.

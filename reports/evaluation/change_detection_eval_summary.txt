@@ -1,0 +1,26 @@
+Module 4: Change Detection Evaluation Summary
+============================================================
+Generated : 2026-09-22T17:22:22.497653+00:00
+Algorithm : Classical: CLAHE → Gaussian Blur → Otsu Threshold → Morphological Close
+Elapsed   : 5.9s
+
+Dataset: LEVIR-CD+
+  Split              : test
+  Pairs evaluated    : 50
+  GT pairs           : 50
+  IoU (mean±std)     : 0.0685 ± 0.1127
+  F1  (mean±std)     : 0.1118 ± 0.1571
+  Precision (mean)   : 0.0757
+  Recall    (mean)   : 0.5717
+  Pixel Acc (mean)   : 0.72
+
+Dataset: SYSU-CD
+  Split              : test
+  Pairs evaluated    : 50
+  GT pairs           : 50
+  IoU (mean±std)     : 0.1852 ± 0.1316
+  F1  (mean±std)     : 0.2921 ± 0.1846
+  Precision (mean)   : 0.2925
+  Recall    (mean)   : 0.4103
+  Pixel Acc (mean)   : 0.7285
+

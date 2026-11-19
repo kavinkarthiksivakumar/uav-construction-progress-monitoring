@@ -1,6 +1,6 @@
 """
 Module 3 Automated Tests
-IEEE M.Tech Project: Construction Activity Detection
+Final Year Project: Construction Activity Detection
 
 Tests:
   1. YOLO label parsing
@@ -17,12 +17,19 @@ import json
 import tempfile
 import shutil
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import numpy as np
 
 # ── Path setup ─────────────────────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 # ─────────────────────────────────────────────────────────────────
 # Test Helpers
@@ -102,9 +109,9 @@ def _():
     detections = parse_yolo_label(lbl_path, img_w=640, img_h=480)
     assert len(detections) == 3, f"Expected 3 detections, got {len(detections)}"
     
-    # Check helmet detection (class 0)
+    # Check helmet detection (class 0 in Roboflow scheme = "Hardhat")
     helmet = next(d for d in detections if d["class_id"] == 0)
-    assert helmet["class_name"] == "helmet"
+    assert helmet["class_name"] == "Hardhat"
     assert "bbox" in helmet
     # Center x=0.25, width=0.10 -> xmin = 0.25 - 0.05 = 0.20 -> 0.20 * 640 = 128
     assert abs(helmet["bbox"][0] - 128) < 2
@@ -176,27 +183,30 @@ def _():
     cv2.imwrite(str(img_a), np.zeros((480, 640, 3), dtype=np.uint8))
     cv2.imwrite(str(img_b), np.zeros((480, 640, 3), dtype=np.uint8))
     
-    # Label for A (1 helmet, 1 vest, 1 person) -> Fully compliant
+    # Label for A (1 Hardhat, 1 Mask, 1 Safety Vest, 1 Person) -> Fully compliant
+    # Roboflow class IDs: 0=Hardhat 1=Mask 2=NO-Hardhat 3=NO-Mask
+    #                     4=NO-Safety Vest 5=Person 7=Safety Vest
     with open(img_a.with_suffix(".txt"), "w") as f:
-        f.write("0 0.2 0.2 0.1 0.1\n") # helmet
-        f.write("4 0.2 0.5 0.1 0.1\n") # vest
-        f.write("3 0.2 0.5 0.1 0.1\n") # person
-        
-    # Label for B (1 no-helmet, 1 no-vest, 1 person) -> Non-compliant
+        f.write("0 0.2 0.2 0.1 0.1\n") # Hardhat (safe)
+        f.write("1 0.3 0.3 0.1 0.1\n") # Mask (safe)
+        f.write("7 0.4 0.4 0.1 0.1\n") # Safety Vest (safe)
+        f.write("5 0.2 0.5 0.1 0.1\n") # Person
+
+    # Label for B (1 NO-Hardhat, 1 NO-Safety Vest, 1 Person) -> Non-compliant
     with open(img_b.with_suffix(".txt"), "w") as f:
-        f.write("1 0.2 0.2 0.1 0.1\n") # no-helmet
-        f.write("2 0.2 0.5 0.1 0.1\n") # no-vest
-        f.write("3 0.2 0.5 0.1 0.1\n") # person
-        
+        f.write("2 0.2 0.2 0.1 0.1\n") # NO-Hardhat
+        f.write("4 0.2 0.5 0.1 0.1\n") # NO-Safety Vest
+        f.write("5 0.2 0.7 0.1 0.1\n") # Person
+
     batch_res = detect_batch(
         images=[img_a, img_b],
         output_dir=_out_dir / "batch_out",
         config={"compliance_threshold": 0.5}
     )
-    
+
     assert batch_res["total"] == 2
     assert batch_res["succeeded"] == 2
-    assert batch_res["total_detections"] == 6
+    assert batch_res["total_detections"] == 7
     assert batch_res["avg_compliance"] == 50.0  # (100% + 0%) / 2
 
 # ─────────────────────────────────────────────────────────────────
@@ -230,7 +240,7 @@ print(f"{BOLD}{'='*55}{RESET}\n")
 # Save report
 report = {
     "module":      "Module 3: Construction Activity Detection",
-    "timestamp":   datetime.utcnow().isoformat() + "Z",
+    "timestamp":   datetime.now(timezone.utc).isoformat(),
     "total":       total,
     "passed":      passed,
     "failed":      failed,

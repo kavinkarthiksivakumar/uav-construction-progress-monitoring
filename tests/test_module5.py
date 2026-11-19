@@ -1,6 +1,6 @@
 """
 Module 5 Automated Tests
-IEEE M.Tech Project: Delay Prediction & Progress Assessment
+Final Year Project: Delay Prediction & Progress Assessment
 
 Tests:
   1. Composite progress score computation (weighted)
@@ -17,11 +17,18 @@ import json
 import tempfile
 import shutil
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # ── Path setup ─────────────────────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 # ─────────────────────────────────────────────────────────────────
 # Test Helpers
@@ -78,7 +85,7 @@ dummy_project = {
     "project_id": "proj_123",
     "name": "Site Overpass construction",
     "location": "Vandalur, Chennai",
-    "created_at": (datetime.utcnow() - timedelta(days=90)).isoformat() + "Z",
+    "created_at": (datetime.now(timezone.utc) - timedelta(days=90)).isoformat(),
     "images": [
         {"image_id": "img1", "filename": "day1.png", "accepted": True, "quality": {"overall_score": 80}},
         {"image_id": "img2", "filename": "day10.png", "accepted": True, "quality": {"overall_score": 85}},
@@ -169,7 +176,7 @@ def _():
         temporal_images=dummy_project["images"],
         change_results=dummy_change,
         planned_duration=365,
-        planned_start=(datetime.utcnow() - timedelta(days=90)).isoformat()
+        planned_start=(datetime.now(timezone.utc) - timedelta(days=90)).isoformat()
     )
     assert scurve["n_points"] > 0
     assert "points" in scurve
@@ -183,7 +190,7 @@ def _():
     # Progress = 50%
     # Milestones: Foundation (15%) -> completed, Structural Frame (35%) -> completed, Building Envelope (55%) -> upcoming/in_progress
     milestones = get_schedule_milestones(
-        planned_start=(datetime.utcnow() - timedelta(days=90)).isoformat(),
+        planned_start=(datetime.now(timezone.utc) - timedelta(days=90)).isoformat(),
         planned_duration=180,
         current_progress=50.0
     )
@@ -254,7 +261,7 @@ print(f"{BOLD}{'='*55}{RESET}\n")
 # Save report
 report = {
     "module":      "Module 5: Delay Prediction & Progress Assessment",
-    "timestamp":   datetime.utcnow().isoformat() + "Z",
+    "timestamp":   datetime.now(timezone.utc).isoformat(),
     "total":       total,
     "passed":      passed,
     "failed":      failed,

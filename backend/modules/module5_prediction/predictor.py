@@ -1,6 +1,6 @@
 """
 Module 5: Delay Prediction & Progress Assessment — Core Predictor
-IEEE M.Tech Project — Explainable Vision-Based Construction Progress Assessment
+Final Year Project — Explainable Vision-Based Construction Progress Assessment
 
 Consumes outputs from Modules 1–4 to compute:
   1. Weighted composite progress score  (0–100 %)
@@ -25,9 +25,16 @@ Delay prediction
 
 import logging
 import math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+from backend.utils.score_utils import (
+    normalize_percentage,
+    validate_metric_range,
+    format_schedule_variance,
+    classify_schedule_status,
+)
 
 logger = logging.getLogger("module5.predictor")
 
@@ -269,17 +276,23 @@ def predict_delay(
     elapsed_days = max(elapsed_days, 1)
 
     expected_progress = min((elapsed_days / planned_duration_days) * 100.0, 100.0)
-    delta             = progress_score - expected_progress   # positive = ahead
+    expected_progress = validate_metric_range(expected_progress, 0.0, 100.0)
+    prog_score_norm   = validate_metric_range(progress_score, 0.0, 100.0)
+    delta             = prog_score_norm - expected_progress   # positive = ahead
     delay_days        = round(-delta / 100.0 * planned_duration_days)
 
-    # Confidence: higher when more elapsed time (more data)
+    # Confidence: higher when more elapsed time (more data), strictly [30, 100]
     elapsed_frac = min(elapsed_days / planned_duration_days, 1.0)
-    confidence   = round(30.0 + elapsed_frac * 70.0, 1)   # 30–100 %
+    confidence   = validate_metric_range(30.0 + elapsed_frac * 70.0, 0.0, 100.0, round_digits=1)
+
+    # Human-friendly schedule variance text
+    schedule_variance_text = format_schedule_variance(delay_days=delay_days)
+    delay_status = classify_schedule_status(delta)
 
     # Predicted completion date
-    remaining_progress = max(100.0 - progress_score, 0.0)
-    if progress_score > 0:
-        days_per_pct = elapsed_days / progress_score
+    remaining_progress = max(100.0 - prog_score_norm, 0.0)
+    if prog_score_norm > 0:
+        days_per_pct = elapsed_days / prog_score_norm
         days_remaining = remaining_progress * days_per_pct
     else:
         days_remaining = planned_duration_days
@@ -297,20 +310,22 @@ def predict_delay(
         predicted_completion = f"~{int(days_remaining)} days remaining"
 
     logger.info(
-        "Module 5 delay prediction: expected=%.1f%%, actual=%.1f%%, delay=%+d days, confidence=%.0f%%",
-        expected_progress, progress_score, delay_days, confidence
+        "Module 5 delay prediction: expected=%.1f%%, actual=%.1f%%, delay=%+d days (%s), confidence=%.0f%%",
+        expected_progress, prog_score_norm, delay_days, schedule_variance_text, confidence
     )
 
     return {
-        "progress_score":      round(progress_score, 2),
-        "expected_progress":   round(expected_progress, 2),
-        "delta_progress":      round(delta, 2),
-        "delay_days":          delay_days,
-        "ahead_of_schedule":   delay_days < 0,
-        "confidence":          confidence,
-        "predicted_completion": predicted_completion,
-        "days_remaining":      int(days_remaining),
-        "elapsed_days":        elapsed_days,
+        "progress_score":        round(prog_score_norm, 2),
+        "expected_progress":     round(expected_progress, 2),
+        "delta_progress":        round(delta, 2),
+        "delay_days":            delay_days,
+        "ahead_of_schedule":     delay_days < 0,
+        "delay_status":          delay_status,
+        "schedule_variance_text": schedule_variance_text,
+        "confidence":            confidence,
+        "predicted_completion":  predicted_completion,
+        "days_remaining":        int(days_remaining),
+        "elapsed_days":          elapsed_days,
         "planned_duration_days": planned_duration_days,
     }
 
@@ -412,13 +427,13 @@ def run_full_prediction(
     if planned_start_date:
         try:
             start = datetime.fromisoformat(planned_start_date.replace("Z", "+00:00"))
-            elapsed_days = max((datetime.utcnow() - start.replace(tzinfo=None)).days, 1)
+            elapsed_days = max((datetime.now(timezone.utc) - start.replace(tzinfo=None)).days, 1)
         except Exception:
             pass
     elif created_at:
         try:
             start = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
-            elapsed_days = max((datetime.utcnow() - start.replace(tzinfo=None)).days, 1)
+            elapsed_days = max((datetime.now(timezone.utc) - start.replace(tzinfo=None)).days, 1)
         except Exception:
             pass
 
@@ -472,7 +487,7 @@ def run_full_prediction(
         "module":              "Module 5: Delay Prediction & Progress Assessment",
         "project_id":          project_data.get("project_id"),
         "project_name":        project_data.get("name"),
-        "predicted_at":        datetime.utcnow().isoformat() + "Z",
+        "predicted_at":        datetime.now(timezone.utc).isoformat(),
         "progress":            score_result,
         "delay":               delay_result,
         "risk":                risk_result,

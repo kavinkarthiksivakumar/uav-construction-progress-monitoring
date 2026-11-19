@@ -1,6 +1,6 @@
 """
 Module 4: Change Detector
-IEEE M.Tech Project — Construction Change Detection
+Final Year Project — Construction Change Detection
 
 Detects changed regions between two temporal (before/after) UAV images
 using the LEVIR-CD dataset bi-temporal pairs.
@@ -24,7 +24,7 @@ that can be plugged in via config["model_path"] without touching anything else.
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -89,7 +89,7 @@ def detect_change_pair(
         "overlay_path":   None,
         "json_path":      None,
         "stats":          {},
-        "detected_at":    datetime.utcnow().isoformat() + "Z",
+        "detected_at":    datetime.now(timezone.utc).isoformat(),
         "error":          None,
     }
 
@@ -199,7 +199,7 @@ def detect_change_pair(
         result["success"]        = True
 
         logger.info(
-            "Module 4 (%s): %s → %.2f%% changed, %d regions",
+            "Module 4 (%s): %s -> %.2f%% changed, %d regions",
             result["mode"], stem, change_pct, len(regions)
         )
 

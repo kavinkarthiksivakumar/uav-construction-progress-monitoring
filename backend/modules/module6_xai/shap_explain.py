@@ -1,6 +1,6 @@
 """
 Module 6 — SHAP Feature Importance Explainer
-IEEE M.Tech Project — Explainable Vision-Based Construction Progress Assessment
+Final Year Project — Explainable Vision-Based Construction Progress Assessment
 
 Generates SHAP (SHapley Additive exPlanations) values to explain the
 Module 5 progress prediction model's decisions.
@@ -23,7 +23,7 @@ Outputs:
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -77,9 +77,9 @@ def _simulate_shap_values(features: Dict[str, float]) -> Dict[str, float]:
 def _plot_shap_bar(
     shap_values: Dict[str, float],
     output_path: Path,
-    title: str = "SHAP Feature Importance",
+    title: str = "Key Decision Factors — Progress Influence",
 ) -> bool:
-    """Save a horizontal SHAP bar chart PNG."""
+    """Save a horizontal decision factor bar chart PNG."""
     try:
         import matplotlib
         matplotlib.use("Agg")
@@ -93,7 +93,7 @@ def _plot_shap_bar(
         bars = ax.barh(labels, values, color=colors, edgecolor="white", linewidth=0.5)
 
         ax.axvline(x=0, color="gray", linewidth=0.8, linestyle="--")
-        ax.set_xlabel("SHAP Value (impact on progress %)", fontsize=10)
+        ax.set_xlabel("Factor Impact (influence on progress %)", fontsize=10)
         ax.set_title(title, fontsize=12, fontweight="bold", pad=10)
 
         # Value labels
@@ -124,9 +124,9 @@ def _plot_shap_waterfall(
     shap_values: Dict[str, float],
     base_value: float,
     output_path: Path,
-    title: str = "SHAP Waterfall",
+    title: str = "Decision Factor Contribution Progression",
 ) -> bool:
-    """Save a waterfall SHAP chart PNG showing cumulative contribution."""
+    """Save a waterfall chart PNG showing cumulative factor contributions."""
     try:
         import matplotlib
         matplotlib.use("Agg")
@@ -268,19 +268,22 @@ def generate_shap_explanation(
     result: Dict[str, Any] = {
         "method":       "SHAP",
         "success":      False,
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
     }
 
     try:
         # ── Extract feature scores from prediction ─────────────────────────
-        sub = prediction.get("sub_scores", {})
+        sub = prediction.get("sub_scores") or prediction.get("progress", {}).get("sub_scores", {})
         features = {
             "change_score":   sub.get("change_score",   prediction.get("change_score",   50.0)),
             "activity_score": sub.get("activity_score", prediction.get("activity_score", 50.0)),
             "temporal_score": sub.get("temporal_score", prediction.get("temporal_score", 50.0)),
             "quality_score":  sub.get("quality_score",  prediction.get("quality_score",  50.0)),
         }
-        progress_score = prediction.get("progress", {}).get("progress_score", 50.0)
+        prog_val = prediction.get("progress", {})
+        progress_score = prog_val.get("progress_score") if isinstance(prog_val, dict) else prediction.get("progress_score", 50.0)
+        if progress_score is None:
+            progress_score = prediction.get("progress_score", 50.0)
         base_value     = 50.0  # expected value of progress
 
         logger.info("SHAP: features=%s", features)
@@ -306,9 +309,9 @@ def generate_shap_explanation(
         # ── Generate charts ────────────────────────────────────────────────
         bar_path = output_dir / "shap_bar.png"
         wf_path  = output_dir / "shap_waterfall.png"
-        bar_ok = _plot_shap_bar(shap_vals, bar_path, title="SHAP Feature Importance — Progress Score")
+        bar_ok = _plot_shap_bar(shap_vals, bar_path, title="Key Decision Factors — Progress Influence")
         wf_ok  = _plot_shap_waterfall(shap_vals, base_value, wf_path,
-                                       title="SHAP Waterfall — Progress Contribution")
+                                       title="Decision Factor Contribution Progression")
 
         # ── Natural language explanation ───────────────────────────────────
         top_pos = [f for f in importance if f["shap_value"] > 0]
@@ -319,16 +322,16 @@ def generate_shap_explanation(
             top = top_pos[0]
             narratives.append(
                 f"The strongest positive driver is **{top['label']}** "
-                f"(SHAP: +{top['shap_value']:.2f}), reflecting high activity level."
+                f"(Impact: +{top['shap_value']:.2f}), reflecting on-track visual progress."
             )
         if top_neg:
             top = top_neg[0]
             narratives.append(
                 f"The most significant constraint is **{top['label']}** "
-                f"(SHAP: {top['shap_value']:.2f}), which is pulling the prediction lower."
+                f"(Impact: {top['shap_value']:.2f}), which is reducing the progress estimate."
             )
         if not top_pos and not top_neg:
-            narratives.append("All features are at baseline — the prediction aligns with the expected schedule.")
+            narratives.append("All visual factors align with baseline schedule expectations.")
 
         # ── Save JSON ──────────────────────────────────────────────────────
         shap_json_path = output_dir / "shap_explanation.json"

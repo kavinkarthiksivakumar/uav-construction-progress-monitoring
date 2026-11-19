@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 2: Advanced Image Processor
-IEEE M.Tech Project — Image Processing
+Final Year Project — Image Processing
 
 Applies a multi-stage processing pipeline to UAV images and LEVIR-CD pairs:
 
@@ -21,7 +21,7 @@ import logging
 import json
 import numpy as np
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, Optional, Tuple, List
 
 logger = logging.getLogger("module2.processor")
@@ -381,7 +381,7 @@ def process_single_image(
         "success":       False,
         "feature_maps":  {},
         "feature_stats": {},
-        "processed_at":  datetime.utcnow().isoformat() + "Z",
+        "processed_at":  datetime.now(timezone.utc).isoformat(),
         "error":         None,
     }
 
@@ -513,7 +513,7 @@ def process_levir_pair(
         "after_maps":   {},
         "diff_maps":    {},
         "change_stats": {},
-        "processed_at": datetime.utcnow().isoformat() + "Z",
+        "processed_at": datetime.now(timezone.utc).isoformat(),
         "error":        None,
     }
 

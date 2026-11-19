@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 1: Image Quality Assessment
-IEEE M.Tech Project — UAV Image Acquisition
+Final Year Project — UAV Image Acquisition
 
 Computes per-image quality metrics:
   - Blur Score    (Laplacian variance)

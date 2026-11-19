@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 5: Delay Prediction & Progress Assessment — Package Init
-IEEE M.Tech Project — Explainable Vision-Based Construction Progress Assessment
+Final Year Project — Explainable Vision-Based Construction Progress Assessment
 """
 
 from backend.modules.module5_prediction.predictor import (

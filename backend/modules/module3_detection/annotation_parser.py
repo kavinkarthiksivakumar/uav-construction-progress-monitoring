@@ -1,6 +1,6 @@
 """
 Module 3: Annotation Parser
-IEEE M.Tech Project — Construction Activity Detection
+Final Year Project — Construction Activity Detection
 
 Parses YOLO-format (.txt) label files from the Roboflow Construction dataset
 and converts them into structured detection dictionaries compatible with the
@@ -17,16 +17,25 @@ from typing import Dict, List, Optional, Any
 
 logger = logging.getLogger("module3.annotation_parser")
 
-# Default class names matching the Roboflow construction dataset
-DEFAULT_CLASSES = ["helmet", "no-helmet", "no-vest", "person", "vest"]
+# Default class names matching the Roboflow Construction Site Safety dataset
+# (indices 0-9 as declared in datasets/roboflow/data.yaml)
+DEFAULT_CLASSES = [
+    "Hardhat", "Mask", "NO-Hardhat", "NO-Mask", "NO-Safety Vest",
+    "Person", "Safety Cone", "Safety Vest", "machinery", "vehicle",
+]
 
 # Class-specific confidence ranges for simulation (makes results realistic)
 CLASS_CONFIDENCE_RANGE = {
-    "helmet":    (0.72, 0.96),
-    "no-helmet": (0.65, 0.90),
-    "no-vest":   (0.60, 0.87),
-    "person":    (0.78, 0.97),
-    "vest":      (0.70, 0.94),
+    "Hardhat":        (0.72, 0.96),
+    "Mask":           (0.68, 0.93),
+    "NO-Hardhat":     (0.65, 0.90),
+    "NO-Mask":        (0.60, 0.88),
+    "NO-Safety Vest": (0.60, 0.87),
+    "Person":         (0.78, 0.97),
+    "Safety Cone":    (0.70, 0.93),
+    "Safety Vest":    (0.70, 0.94),
+    "machinery":      (0.75, 0.95),
+    "vehicle":        (0.73, 0.95),
 }
 
 

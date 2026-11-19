@@ -1,13 +1,13 @@
 """
-Module 6 — PDF/HTML Explainability Report Generator
-IEEE M.Tech Project — Explainable Vision-Based Construction Progress Assessment
+Module 6 — AI Explainability Report Generator
+UAV Vision — AI-Powered Construction Intelligence Platform
 
 Generates a comprehensive explainability report combining:
-  - GradCAM heatmap visualisations
-  - SHAP feature importance analysis
-  - Module 5 progress prediction summary
-  - XAI narrative and recommendations
-  - Executive summary for IEEE review
+  - AI attention map visualisations
+  - Key decision factors analysis
+  - Progress prediction summary
+  - Actionable narrative and recommendations
+  - Executive summary for project review
 
 Output: HTML report (always) + PDF (if reportlab/fpdf2 available)
 """
@@ -15,7 +15,7 @@ Output: HTML report (always) + PDF (if reportlab/fpdf2 available)
 import json
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -30,7 +30,7 @@ _HTML_TEMPLATE = """<!DOCTYPE html>
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>XAI Report — {project_name}</title>
+<title>AI Construction Intelligence Report — {project_name}</title>
 <style>
   :root {{
     --bg: #0f172a; --surface: #1e293b; --border: #334155;
@@ -73,7 +73,7 @@ _HTML_TEMPLATE = """<!DOCTYPE html>
 <div class="container">
 
   <!-- Header -->
-  <h1>📋 XAI Explainability Report</h1>
+  <h1>📋 AI Construction Intelligence Report</h1>
   <p style="color:var(--muted); margin-bottom: 8px;">{project_name} &bull; Generated {generated_at}</p>
   <span class="badge badge-{risk_badge}">{risk_label}</span>
 
@@ -96,12 +96,12 @@ _HTML_TEMPLATE = """<!DOCTYPE html>
     </div>
   </div>
 
-  <!-- Module Scores -->
-  <h2>Module Input Scores</h2>
+  <!-- Analysis Input Factors -->
+  <h2>Analysis Input Factors</h2>
   <div class="card">
     <table>
       <thead><tr>
-        <th>Feature</th><th>Source Module</th><th>Score</th><th>Weight</th><th>Contribution</th>
+        <th>Factor</th><th>Analysis Stage</th><th>Score</th><th>Weight</th><th>Contribution</th>
       </tr></thead>
       <tbody>
         {feature_rows}
@@ -109,31 +109,31 @@ _HTML_TEMPLATE = """<!DOCTYPE html>
     </table>
   </div>
 
-  <!-- SHAP Analysis -->
-  <h2>SHAP Feature Importance Analysis</h2>
+  <!-- Key Decision Factors -->
+  <h2>Key Decision Factors</h2>
   <div class="card">
     <p style="color:var(--muted); margin-bottom:12px;">
-      SHAP values quantify each feature's contribution to the prediction relative to the baseline (50%).
-      Positive values push the prediction higher; negative values lower it.
+      Decision factors quantify each visual indicator's contribution to the overall progress score relative to baseline.
+      Positive impacts indicate progress milestones on track; negative impacts highlight delay factors requiring attention.
     </p>
     {shap_narrative}
     {shap_bar_img}
     {shap_wf_img}
-    <h3>SHAP Values</h3>
+    <h3>Factor Contributions</h3>
     <table>
-      <thead><tr><th>Feature</th><th>Value</th><th>SHAP</th><th>Impact</th></tr></thead>
+      <thead><tr><th>Factor</th><th>Measured Value</th><th>Influence</th><th>Impact</th></tr></thead>
       <tbody>
         {shap_rows}
       </tbody>
     </table>
   </div>
 
-  <!-- GradCAM Analysis -->
-  <h2>GradCAM Activation Analysis</h2>
+  <!-- AI Attention Map Analysis -->
+  <h2>AI Attention Map Analysis</h2>
   <div class="card">
     <p style="color:var(--muted); margin-bottom:12px;">
-      GradCAM highlights image regions that most influenced the construction activity detection
-      (Module 3). Warmer colours (red/yellow) indicate higher model attention.
+      AI attention maps highlight spatial regions that most influenced construction activity and safety observations.
+      Warmer colours (red/yellow) indicate high visual focus and detected site features.
     </p>
     {gradcam_section}
   </div>
@@ -144,8 +144,8 @@ _HTML_TEMPLATE = """<!DOCTYPE html>
     {recommendations}
   </div>
 
-  <!-- Technical Metadata -->
-  <h2>Technical Metadata</h2>
+  <!-- Analysis Metadata -->
+  <h2>Analysis Metadata</h2>
   <div class="card">
     <table>
       <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
@@ -156,8 +156,8 @@ _HTML_TEMPLATE = """<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    <p>IEEE M.Tech Project &mdash; Explainable Vision-Based Construction Progress Assessment</p>
-    <p>GradCAM &bull; SHAP &bull; XGBoost &bull; FC-Siam-Diff &bull; YOLOv8</p>
+    <p>UAV Vision &mdash; AI-Powered Construction Monitoring & Progress Assessment</p>
+    <p>Computer Vision &bull; Multi-Temporal Analysis &bull; Predictive Intelligence &bull; Explainable AI</p>
   </div>
 </div>
 </body>
@@ -199,8 +199,8 @@ def _feature_rows(features: Dict, shap_vals: Dict) -> str:
                   "temporal_score": 0.20, "quality_score": 0.10}
     label_map  = {"change_score": "Change Detection", "activity_score": "Activity Detection",
                   "temporal_score": "Temporal Coverage", "quality_score": "Image Quality"}
-    src_map    = {"change_score": "Module 4", "activity_score": "Module 3",
-                  "temporal_score": "Module 1", "quality_score": "Module 1"}
+    src_map    = {"change_score": "Change Analysis", "activity_score": "Activity Detection",
+                  "temporal_score": "Temporal Alignment", "quality_score": "Image Quality Check"}
     rows = []
     for k, w in weight_map.items():
         v    = features.get(k, 50.0)
@@ -225,15 +225,15 @@ def _shap_rows(shap_vals: Dict, features: Dict) -> str:
 
 def _gradcam_section(gradcam_results: List[Dict]) -> str:
     if not gradcam_results:
-        return "<p style='color:#94a3b8;font-style:italic'>No GradCAM results available. Upload project images and run Module 6.</p>"
+        return "<p style='color:#94a3b8;font-style:italic'>No attention map results available. Upload project images and run analysis.</p>"
     parts = []
     for r in gradcam_results[:4]:  # show max 4
         stem  = Path(r.get("image_path", "image")).stem
         stats = r.get("stats", {})
         parts.append(f"<h3>{stem}</h3>")
-        parts.append(f"<p style='color:#94a3b8'>Max Activation: {stats.get('max_activation',0):.3f} | "
-                     f"High-Activation Area: {stats.get('high_activation_pct',0):.1f}%</p>")
-        parts.append(_img_tag(r.get("overlay_path"), f"GradCAM overlay — {stem}"))
+        parts.append(f"<p style='color:#94a3b8'>Max Focus Intensity: {stats.get('max_activation',0):.3f} | "
+                     f"High-Focus Area: {stats.get('high_activation_pct',0):.1f}%</p>")
+        parts.append(_img_tag(r.get("overlay_path"), f"AI Attention overlay — {stem}"))
     return "\n".join(parts)
 
 
@@ -270,16 +270,16 @@ def _meta_rows(prediction: Dict, shap: Dict, gradcam_count: int) -> str:
     delay = prediction.get("delay", {})
     prog  = prediction.get("progress", {})
     rows  = [
-        ("Generated At",           datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")),
+        ("Generated At",           datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")),
         ("Progress Score",         f"{prog.get('progress_score',0):.2f}%"),
         ("Delay Days",             f"{delay.get('delay_days',0):+d} days"),
         ("Risk Level",             delay.get("risk_level", "N/A")),
-        ("SHAP Mode",              shap.get("mode", "N/A")),
-        ("GradCAM Images",         gradcam_count),
-        ("XAI Framework",         "SHAP + GradCAM (Module 6)"),
-        ("Prediction Model",       "Weighted Linear + XGBoost (Module 5)"),
-        ("Change Detection Model", "FC-Siam-Diff / CLAHE Differencing (Module 4)"),
-        ("Activity Model",         "YOLOv8 / Simulation (Module 3)"),
+        ("Decision Analysis Mode", shap.get("mode", "Standard")),
+        ("Attention Map Images",   gradcam_count),
+        ("Explainability Engine",  "Multi-Factor Visual Attribution"),
+        ("Prediction Engine",      "Multi-Stage Progress Predictor"),
+        ("Change Analysis",        "Multi-Temporal Visual Differencing"),
+        ("Activity Detection",     "Deep Learning Vision Detector"),
     ]
     return "\n".join(f"<tr><td style='color:#94a3b8'>{k}</td><td>{v}</td></tr>" for k, v in rows)
 
@@ -372,7 +372,7 @@ def generate_xai_pdf_report(
 
     result: Dict[str, Any] = {
         "success":      False,
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
     }
 
     try:
@@ -386,7 +386,7 @@ def generate_xai_pdf_report(
         # Build HTML
         html = _HTML_TEMPLATE.format(
             project_name    = project_name,
-            generated_at    = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
+            generated_at    = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
             risk_badge      = _risk_badge(risk_level),
             risk_label      = risk_level.replace("_", " ").title(),
             progress_score  = progress_sc,

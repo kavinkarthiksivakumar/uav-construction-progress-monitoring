@@ -1,6 +1,6 @@
 """
 Module 4 Automated Tests
-IEEE M.Tech Project: Construction Change Detection
+Final Year Project: Construction Change Detection
 
 Tests:
   1. Change severity classification
@@ -17,12 +17,19 @@ import json
 import tempfile
 import shutil
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 import numpy as np
 
 # ── Path setup ─────────────────────────────────────────────────
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
 
 # ─────────────────────────────────────────────────────────────────
 # Test Helpers
@@ -233,7 +240,7 @@ print(f"{BOLD}{'='*55}{RESET}\n")
 # Save report
 report = {
     "module":      "Module 4: Construction Change Detection",
-    "timestamp":   datetime.utcnow().isoformat() + "Z",
+    "timestamp":   datetime.now(timezone.utc).isoformat(),
     "total":       total,
     "passed":      passed,
     "failed":      failed,

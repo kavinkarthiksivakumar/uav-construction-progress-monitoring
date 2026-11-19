@@ -10,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body class="light-mode">
 
 <canvas id="particles-canvas"></canvas>
 
@@ -173,6 +173,24 @@
             <span class="nav-tooltip" role="tooltip">Reports</span>
           </a>
 
+          <a class="nav-item nav-item-ws" data-tab="results" id="ws-nav-results"
+             href="#" tabindex="0" aria-label="Results Center">
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"/>
+            </svg>
+            <span class="nav-label">Results Center</span>
+            <span class="nav-tooltip" role="tooltip">Qualitative &amp; Quantitative Results</span>
+          </a>
+
+          <a class="nav-item nav-item-ws" data-tab="decision" id="ws-nav-decision"
+             href="#" tabindex="0" aria-label="Health and Explainability">
+            <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+            <span class="nav-label">Health &amp; Explainability</span>
+            <span class="nav-tooltip" role="tooltip">Project Health &amp; XAI Queries</span>
+          </a>
+
           <a class="nav-item nav-item-ws" data-tab="proj-settings" id="ws-nav-settings"
              href="#" tabindex="0" aria-label="Project Settings">
             <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -190,13 +208,13 @@
         <span class="nav-section-label" aria-hidden="true">Platform</span>
 
         <a class="nav-item" data-page="ai-models" id="nav-ai-models"
-           href="#" tabindex="0" aria-label="AI Models">
+           href="#" tabindex="0" aria-label="Evaluation Datasets">
           <svg class="nav-icon" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path d="M13 7H7v6h6V7z"/>
             <path fill-rule="evenodd" d="M7 2a1 1 0 012 0v1h2V2a1 1 0 112 0v1h2a2 2 0 012 2v2h1a1 1 0 110 2h-1v2h1a1 1 0 110 2h-1v2a2 2 0 01-2 2h-2v1a1 1 0 11-2 0v-1H9v1a1 1 0 11-2 0v-1H5a2 2 0 01-2-2v-2H2a1 1 0 110-2h1V9H2a1 1 0 010-2h1V5a2 2 0 012-2h2V2z" clip-rule="evenodd"/>
           </svg>
-          <span class="nav-label">AI Models</span>
-          <span class="nav-tooltip" role="tooltip">AI Models</span>
+          <span class="nav-label">Evaluation Datasets</span>
+          <span class="nav-tooltip" role="tooltip">Reference Data & Benchmarks</span>
         </a>
 
         <a class="nav-item" data-page="sys-settings" id="nav-sys-settings"
@@ -242,19 +260,22 @@
         </div>
       </div>
       <div class="topbar-right">
-        <button class="theme-toggle" id="theme-toggle" title="Toggle light/dark mode">
-          <svg id="theme-icon-dark" width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+        <button class="theme-toggle" id="theme-toggle"
+                aria-label="Toggle light/dark mode" title="Toggle light/dark mode">
+          <svg id="theme-icon-dark" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
           </svg>
-          <svg id="theme-icon-light" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style="display:none">
+          <svg id="theme-icon-light" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="display:none">
             <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
           </svg>
         </button>
-        <button class="notif-btn" id="notif-btn" title="Notifications">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+        <button class="notif-btn" id="notif-btn"
+                aria-label="Notifications" aria-haspopup="true" aria-expanded="false"
+                title="Notifications">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/>
           </svg>
-          <span class="notif-badge hidden" id="notif-badge">0</span>
+          <span class="notif-badge hidden" id="notif-badge" aria-live="polite">0</span>
         </button>
         <button class="btn btn-primary btn-sm" id="btn-new-project">
           <svg width="13" height="13" viewBox="0 0 14 14" fill="currentColor"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -269,23 +290,55 @@
     <section class="page active" id="page-dashboard">
       <!-- KPI Stats -->
       <div class="stats-grid" id="dash-stats-grid">
-        <div class="stat-card">
+        <div class="stat-card" id="dash-card-projects" onclick="navigate('projects')" role="button" tabindex="0" title="Click to view all projects">
           <div class="stat-icon cyan"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1H8a3 3 0 00-3 3v1.5a1.5 1.5 0 01-3 0V6z" clip-rule="evenodd"/><path d="M6 12a2 2 0 012-2h8a2 2 0 012 2v2a2 2 0 01-2 2H2h2a2 2 0 002-2v-2z"/></svg></div>
           <div class="stat-body"><div class="stat-value" id="dash-total-projects">0</div><div class="stat-label">Total Projects</div></div>
+          <span class="stat-arrow" aria-hidden="true">→</span>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" id="dash-card-inspections" onclick="navigateToInspections()" role="button" tabindex="0" title="Click to view inspections">
           <div class="stat-icon green"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg></div>
           <div class="stat-body"><div class="stat-value" id="dash-total-inspections">0</div><div class="stat-label">Total Inspections</div></div>
+          <span class="stat-arrow" aria-hidden="true">→</span>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" id="dash-card-images" onclick="navigateToImages()" role="button" tabindex="0" title="Click to view uploaded drone images">
           <div class="stat-icon amber"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg></div>
           <div class="stat-body"><div class="stat-value" id="dash-total-images">0</div><div class="stat-label">Images Uploaded</div></div>
+          <span class="stat-arrow" aria-hidden="true">→</span>
         </div>
-        <div class="stat-card">
+        <div class="stat-card" id="dash-card-progress" onclick="navigateToProgress()" role="button" tabindex="0" title="Click to view progress timeline">
           <div class="stat-icon purple"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg></div>
           <div class="stat-body"><div class="stat-value" id="dash-avg-progress">—</div><div class="stat-label">Avg Progress</div></div>
+          <span class="stat-arrow" aria-hidden="true">→</span>
+        </div>
+        <div class="stat-card" id="dash-card-delayed" onclick="filterProjectsBySchedule('delayed')" role="button" tabindex="0"
+             aria-label="Delayed Projects: Filter projects behind schedule"
+             title="Click to filter delayed projects" style="border-left:3px solid #ef4444">
+          <div class="stat-icon" style="background:rgba(239,68,68,0.15);color:#ef4444"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg></div>
+          <div class="stat-body">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="stat-value" id="dash-delayed-projects" style="color:#ef4444">0</span>
+              <span class="badge badge-red" style="font-size:10px;padding:2px 6px">DELAY ALERT</span>
+            </div>
+            <div class="stat-label">Delayed Projects</div>
+          </div>
+          <span class="stat-arrow" aria-hidden="true">→</span>
+        </div>
+        <div class="stat-card" id="dash-card-at-risk" onclick="filterProjectsBySchedule('at-risk')" role="button" tabindex="0"
+             aria-label="At-Risk Projects: Filter projects with potential delay"
+             title="Click to filter at-risk projects" style="border-left:3px solid #f59e0b">
+          <div class="stat-icon" style="background:rgba(245,158,11,0.15);color:#f59e0b"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg></div>
+          <div class="stat-body">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="stat-value" id="dash-at-risk-projects" style="color:#f59e0b">0</span>
+              <span class="badge badge-amber" style="font-size:10px;padding:2px 6px">WARNING</span>
+            </div>
+            <div class="stat-label">At-Risk Projects</div>
+          </div>
+          <span class="stat-arrow" aria-hidden="true">→</span>
         </div>
       </div>
+
+
 
       <!-- Projects Grid + Activity Feed -->
       <div class="grid-2" style="gap:24px">
@@ -414,6 +467,14 @@
           <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/></svg>
           <span>Reports</span>
         </button>
+        <button class="workspace-tab" data-tab="results">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11 4a1 1 0 10-2 0v4a1 1 0 102 0V7zm-3 1a1 1 0 10-2 0v3a1 1 0 102 0V8zM8 9a1 1 0 00-2 0v2a1 1 0 102 0V9z" clip-rule="evenodd"/></svg>
+          <span>Results Center</span>
+        </button>
+        <button class="workspace-tab" data-tab="decision">
+          <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+          <span>Health &amp; XAI</span>
+        </button>
         <button class="workspace-tab" data-tab="proj-settings">
           <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"/></svg>
           <span>Settings</span>
@@ -423,21 +484,25 @@
       <!-- ── TAB: Overview ──────────────────────────────────────── -->
       <div class="tab-panel active" id="tab-overview">
         <div class="grid-4 mb-24" id="overview-kpi-grid">
-          <div class="stat-card">
+          <div class="stat-card" onclick="switchTab('inspections')" role="button" tabindex="0" title="Click to view inspections">
             <div class="stat-icon cyan"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/></svg></div>
             <div class="stat-body"><div class="stat-value" id="ov-inspections">0</div><div class="stat-label">Inspections</div></div>
+            <span class="stat-arrow" aria-hidden="true">→</span>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" onclick="switchTab('images')" role="button" tabindex="0" title="Click to view drone images">
             <div class="stat-icon amber"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/></svg></div>
             <div class="stat-body"><div class="stat-value" id="ov-images">0</div><div class="stat-label">Images</div></div>
+            <span class="stat-arrow" aria-hidden="true">→</span>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" onclick="switchTab('timeline')" role="button" tabindex="0" title="Click to view progress timeline">
             <div class="stat-icon green"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg></div>
             <div class="stat-body"><div class="stat-value" id="ov-progress">—</div><div class="stat-label">Progress</div></div>
+            <span class="stat-arrow" aria-hidden="true">→</span>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" onclick="switchTab('decision')" role="button" tabindex="0" title="Click to view health & risk analysis">
             <div class="stat-icon purple"><svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></div>
             <div class="stat-body"><div class="stat-value" id="ov-risk">—</div><div class="stat-label">Risk Level</div></div>
+            <span class="stat-arrow" aria-hidden="true">→</span>
           </div>
         </div>
 
@@ -447,10 +512,17 @@
             <div class="card-header"><span class="card-title">Construction Progress</span><span class="badge badge-ghost" id="ov-schedule-badge">—</span></div>
             <div class="card-body" style="display:flex;align-items:center;gap:24px">
               <div class="gauge-wrap">
-                <svg width="160" height="100" viewBox="0 0 200 120">
-                  <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="18" stroke-linecap="round"/>
-                  <path id="ov-gauge-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gGrad)" stroke-width="18" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251"/>
-                  <defs><linearGradient id="gGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#00D4FF"/><stop offset="100%" stop-color="#8B6FD4"/></linearGradient></defs>
+                <svg width="160" height="100" viewBox="0 0 200 120"
+                     role="img" aria-labelledby="gauge-title gauge-desc">
+                  <title id="gauge-title">Construction Progress Gauge</title>
+                  <desc id="gauge-desc">Semicircular gauge showing construction progress percentage</desc>
+                  <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none"
+                        class="gauge-track"
+                        stroke-width="18" stroke-linecap="round"/>
+                  <path id="ov-gauge-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none"
+                        stroke="url(#gGrad)" stroke-width="18" stroke-linecap="round"
+                        stroke-dasharray="251" stroke-dashoffset="251"/>
+                  <defs><linearGradient id="gGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--cyan)"/><stop offset="100%" stop-color="var(--purple)"/></linearGradient></defs>
                   <text id="ov-gauge-text" x="100" y="96" text-anchor="middle" fill="var(--text-primary)" font-size="26" font-weight="800" font-family="Inter">0%</text>
                   <text x="100" y="112" text-anchor="middle" fill="var(--text-secondary)" font-size="10" font-family="Inter">Progress Score</text>
                 </svg>
@@ -466,22 +538,89 @@
 
           <!-- Quick actions + info -->
           <div class="card">
-            <div class="card-header"><span class="card-title">Project Details</span></div>
+            <div class="card-header"><span class="card-title">Project Details & Schedule</span></div>
             <div class="card-body" style="padding:16px">
               <div class="detail-row"><span class="detail-key">Description</span><span class="detail-val text-sm" id="ov-description">—</span></div>
               <div class="detail-row"><span class="detail-key">Location</span><span class="detail-val" id="ov-location">—</span></div>
               <div class="detail-row"><span class="detail-key">Type</span><span class="detail-val" id="ov-type">—</span></div>
+              <div class="detail-row"><span class="detail-key">Project Manager</span><span class="detail-val" id="ov-manager">—</span></div>
               <div class="detail-row"><span class="detail-key">Start Date</span><span class="detail-val" id="ov-start-date">—</span></div>
+              <div class="detail-row"><span class="detail-key">Expected End</span><span class="detail-val" id="ov-end-date">—</span></div>
               <div class="detail-row"><span class="detail-key">Planned Duration</span><span class="detail-val" id="ov-duration">—</span></div>
+              <div class="detail-row"><span class="detail-key">Elapsed Days</span><span class="detail-val" id="ov-elapsed-days">—</span></div>
+              <div class="detail-row"><span class="detail-key">Remaining Days</span><span class="detail-val" id="ov-remaining-days">—</span></div>
               <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val" id="ov-status-val">Active</span></div>
-              <div class="mt-16 flex gap-8">
-                <button class="btn btn-primary w-full" onclick="switchTab('analysis')">Run AI Analysis</button>
-                <button class="btn btn-secondary" onclick="switchTab('inspections')">Inspections</button>
-              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Schedule metrics row -->
+        <div class="grid-4 mb-16 mt-4" id="ov-schedule-metrics" style="margin-top:16px">
+          <div class="stat-card">
+            <div class="stat-body">
+              <div class="stat-value text-cyan" id="ov-expected-progress">—</div>
+              <div class="stat-label">Expected Progress</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">By project timeline</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-body">
+              <div class="stat-value text-green" id="ov-actual-progress">—</div>
+              <div class="stat-label">Actual Progress</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">AI-estimated</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-body">
+              <div class="stat-value" id="ov-deviation" style="color:var(--text-secondary)">—</div>
+              <div class="stat-label">Progress Deviation</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">actual − expected</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-body">
+              <div class="stat-value" id="ov-delay-status" style="font-size:13px">Unknown</div>
+              <div class="stat-label">Schedule Status</div>
+              <div style="font-size:10px;color:var(--text-muted);margin-top:2px">Classification</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Assessment action -->
+        <div class="card" style="border:1px solid rgba(0,212,255,0.2);background:rgba(0,212,255,0.04)">
+          <div class="card-body" style="padding:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <div style="flex:1;min-width:240px">
+              <div style="font-size:13px;font-weight:700;margin-bottom:4px">🤖 Run Full Project Assessment</div>
+              <div style="font-size:12px;color:var(--text-secondary)">Orchestrates all 6 AI modules: detection → change → progress → XAI → schedule deviation → delay classification.</div>
+            </div>
+            <div class="flex gap-8 flex-wrap items-center">
+              <button class="btn btn-primary" id="btn-full-assessment" onclick="runFullAssessment()">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+                Full Assessment
+              </button>
+              <a class="btn btn-secondary btn-sm" id="btn-ov-open-report" href="#" target="_blank" title="Open Official Civil Engineering Inspection Report">🌐 Open Official Report</a>
+              <a class="btn btn-ghost btn-sm" id="btn-ov-download-report" href="#" download title="Download Authoritative Inspection Report HTML">📥 Download HTML Report</a>
+              <button class="btn btn-ghost btn-sm" onclick="switchTab('analysis')">Manual Analysis →</button>
+            </div>
+          </div>
+          <div id="assessment-result-banner" class="hidden" style="padding:12px 16px;border-top:1px solid var(--border);font-size:13px;color:var(--text-primary);background:rgba(0,0,0,0.2)"></div>
+        </div>
+
+        <!-- Pipeline Flow Widget -->
+        <div class="card" id="pipeline-flow-card" style="margin-top:16px">
+          <div class="card-header">
+            <span class="card-title">🔄 AI Pipeline Flow — Workflow Status</span>
+            <button class="btn btn-ghost btn-sm" onclick="loadPipelineFlowWidget()">↻ Refresh</button>
+          </div>
+          <div class="card-body" id="pipeline-flow-body">
+            <div class="empty-state" style="padding:20px">
+              <p class="text-muted text-sm">Run Full Assessment to see pipeline status.</p>
             </div>
           </div>
         </div>
       </div>
+
+
 
       <!-- ── TAB: Inspections ───────────────────────────────────── -->
       <div class="tab-panel" id="tab-inspections">
@@ -587,165 +726,155 @@
 
       <!-- ── TAB: AI Analysis ───────────────────────────────────── -->
       <div class="tab-panel" id="tab-analysis">
-        <!-- Select inspection -->
-        <div class="card mb-16">
-          <div class="card-body" style="padding:16px">
-            <div class="flex items-center gap-12">
-              <label class="form-label" style="margin:0;white-space:nowrap">Analyze Inspection:</label>
-              <select class="form-input" id="analysis-inspection-select" style="flex:1;max-width:400px">
+
+        <!-- Compact Professional AI Analysis Card -->
+        <div class="ai-analysis-card" id="ai-analysis-main-card">
+          <!-- Card Header & Status -->
+          <div class="ai-card-header">
+            <div>
+              <div class="ai-card-eyebrow">AI ANALYSIS ENGINE</div>
+              <h2 class="ai-card-title">Construction Progress Assessment</h2>
+              <div class="ai-card-target" id="ai-target-summary">
+                Analyzing UAV inspection imagery for: <strong id="ai-target-insp-name">—</strong>
+              </div>
+            </div>
+            <div id="ai-header-badge-wrap">
+              <span class="badge badge-ghost" id="ai-main-status-badge">READY</span>
+            </div>
+          </div>
+
+          <!-- Inspection Selection & Controls Bar -->
+          <div class="ai-controls-bar">
+            <div class="ai-select-group">
+              <label for="analysis-inspection-select" class="form-label text-xs">Target Inspection:</label>
+              <select class="form-input form-input-sm" id="analysis-inspection-select">
                 <option value="">— Select inspection —</option>
               </select>
             </div>
+            <div class="ai-actions-group">
+              <button class="btn btn-primary" id="btn-run-analysis">
+                <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+                <span id="btn-run-analysis-text">Run AI Analysis</span>
+              </button>
+            </div>
           </div>
+
+          <!-- Collapsible Analysis Parameters (Compact Accordion) -->
+          <details class="ai-params-accordion" id="ai-params-details">
+            <summary class="ai-params-summary">
+              <span>⚙️ Pipeline Parameters &amp; Weights</span>
+              <span class="text-xs text-muted">Planned duration, limits &amp; scoring weights</span>
+            </summary>
+            <div class="ai-params-grid">
+              <div class="form-group" style="margin:0">
+                <label class="form-label text-xs">Planned Duration (days)</label>
+                <input type="number" class="form-input form-input-sm" id="cfg-planned-duration" value="365" min="30" max="3650" />
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label text-xs">Project Start Date</label>
+                <input type="date" class="form-input form-input-sm" id="cfg-start-date" />
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label text-xs">Max Images / Module</label>
+                <input type="number" class="form-input form-input-sm" id="cfg-limit" value="10" min="1" max="20" />
+              </div>
+              <div class="form-group" style="margin:0">
+                <label class="form-label text-xs">Weights (Change / Act / Temp / Qual)</label>
+                <div style="display:flex;gap:4px">
+                  <input type="number" class="form-input form-input-sm" id="cfg-w-change" value="40" title="Change Weight %" />
+                  <input type="number" class="form-input form-input-sm" id="cfg-w-activity" value="30" title="Activity Weight %" />
+                  <input type="number" class="form-input form-input-sm" id="cfg-w-temporal" value="20" title="Temporal Weight %" />
+                  <input type="number" class="form-input form-input-sm" id="cfg-w-quality" value="10" title="Quality Weight %" />
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- Single Compact Progress Bar Section -->
+          <div class="ai-progress-section" id="ai-progress-section">
+            <div class="ai-progress-meta">
+              <div class="ai-stage-info">
+                <span class="ai-stage-title" id="ai-stage-title">Current Stage: Ready</span>
+                <span class="ai-stage-desc" id="ai-stage-desc" role="status" aria-live="polite">Select an inspection and run analysis to begin.</span>
+              </div>
+              <div class="ai-progress-number" id="ai-progress-pct">0%</div>
+            </div>
+
+            <!-- Single accessible progress bar -->
+            <div class="ai-progress-track" role="progressbar" id="ai-progress-bar"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+                 aria-label="AI Pipeline Execution Progress">
+              <div class="ai-progress-fill" id="ai-progress-fill" style="width:0%"></div>
+            </div>
+
+            <!-- Compact Mini Status Line -->
+            <div class="ai-mini-stepper" id="ai-mini-stepper" aria-label="Pipeline Stages Overview">
+              <div class="ai-mini-step" id="mstep-1"><span class="mstep-dot">○</span> <span class="mstep-name">Input</span></div>
+              <div class="ai-mini-sep">›</div>
+              <div class="ai-mini-step" id="mstep-2"><span class="mstep-dot">○</span> <span class="mstep-name">Validation</span></div>
+              <div class="ai-mini-sep">›</div>
+              <div class="ai-mini-step" id="mstep-3"><span class="mstep-dot">○</span> <span class="mstep-name">Detection</span></div>
+              <div class="ai-mini-sep">›</div>
+              <div class="ai-mini-step" id="mstep-4"><span class="mstep-dot">○</span> <span class="mstep-name">Change</span></div>
+              <div class="ai-mini-sep">›</div>
+              <div class="ai-mini-step" id="mstep-5"><span class="mstep-dot">○</span> <span class="mstep-name">Report</span></div>
+            </div>
+          </div>
+
+          <!-- Completed State Box (Clean, Compact, Prominent) -->
+          <div class="ai-result-panel" id="ai-completed-panel" style="display:none">
+            <div class="ai-result-icon">✓</div>
+            <div class="ai-result-content">
+              <div class="ai-result-title">Analysis Complete</div>
+              <div class="ai-result-text" id="ai-completed-text">Construction analysis completed successfully with verified evidence.</div>
+              <div class="ai-result-highlight" id="ai-completed-highlight">
+                Key Result: Progress assessment, schedule deviation, and safety compliance are ready for review.
+              </div>
+              <div class="ai-result-actions" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                <a class="btn btn-primary btn-sm" id="ai-report-btn" href="#" target="_blank" title="Open Official Civil Engineering Inspection Report in new tab">🌐 Open Full Report</a>
+                <a class="btn btn-secondary btn-sm" id="ai-download-report-btn" href="#" download title="Download Authoritative Inspection Report File">📥 Download HTML Report</a>
+                <button class="btn btn-ghost btn-sm" onclick="switchTab('results')">📊 View Analysis Results</button>
+                <button class="btn btn-ghost btn-sm" onclick="switchTab('overview')">🎯 View Progress Overview</button>
+                <button class="btn btn-ghost btn-sm" onclick="openAnalysisDetailsModal()">🔍 Verification Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error State Box -->
+          <div class="ai-error-panel" id="ai-error-panel" style="display:none" role="alert">
+            <div class="ai-error-icon">✗</div>
+            <div class="ai-error-content">
+              <div class="ai-error-title">Analysis Failed</div>
+              <div class="ai-error-text" id="ai-error-message">Analysis could not be completed. Please check your inputs and try again.</div>
+              <div class="ai-result-actions">
+                <button class="btn btn-secondary btn-sm" onclick="startAnalysis(document.getElementById('analysis-inspection-select')?.value)">↻ Retry Analysis</button>
+                <button class="btn btn-ghost btn-sm" onclick="openAnalysisDetailsModal()">🔍 View Details</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Unavailable State Box -->
+          <div class="ai-unavail-panel" id="ai-unavail-panel" style="display:none">
+            <div class="ai-unavail-icon">⚠️</div>
+            <div class="ai-unavail-content">
+              <div class="ai-unavail-title">Model / Data Unavailable</div>
+              <div class="ai-unavail-text" id="ai-unavail-message">Required verified model or input imagery is unavailable for this inspection.</div>
+              <div class="ai-result-actions">
+                <button class="btn btn-ghost btn-sm" onclick="openAnalysisDetailsModal()">🔍 View Details</button>
+              </div>
+            </div>
+          </div>
+
         </div>
 
-        <!-- Analysis config card -->
-        <div class="card mb-16" id="analysis-config-card">
-          <div class="card-header"><span class="card-title">⚙️ Analysis Configuration</span></div>
-          <div class="card-body">
-            <div class="grid-3" style="gap:12px;margin-bottom:16px">
-              <div class="form-group" style="margin:0">
-                <label class="form-label">Planned Duration (days)</label>
-                <input type="number" class="form-input" id="cfg-planned-duration" value="365" min="30" max="3650" />
-              </div>
-              <div class="form-group" style="margin:0">
-                <label class="form-label">Project Start Date</label>
-                <input type="date" class="form-input" id="cfg-start-date" />
-              </div>
-              <div class="form-group" style="margin:0">
-                <label class="form-label">Max Images per Module</label>
-                <input type="number" class="form-input" id="cfg-limit" value="10" min="1" max="20" />
-              </div>
-            </div>
-            <div class="grid-4" style="gap:12px;margin-bottom:20px">
-              <div class="form-group" style="margin:0">
-                <label class="form-label">Change Weight (%)</label>
-                <input type="number" class="form-input" id="cfg-w-change" value="40" min="0" max="100" />
-              </div>
-              <div class="form-group" style="margin:0">
-                <label class="form-label">Activity Weight (%)</label>
-                <input type="number" class="form-input" id="cfg-w-activity" value="30" min="0" max="100" />
-              </div>
-              <div class="form-group" style="margin:0">
-                <label class="form-label">Temporal Weight (%)</label>
-                <input type="number" class="form-input" id="cfg-w-temporal" value="20" min="0" max="100" />
-              </div>
-              <div class="form-group" style="margin:0">
-                <label class="form-label">Quality Weight (%)</label>
-                <input type="number" class="form-input" id="cfg-w-quality" value="10" min="0" max="100" />
-              </div>
-            </div>
-            <button class="btn btn-primary btn-lg w-full" id="btn-run-analysis">
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
-              Run Complete AI Analysis Pipeline
-            </button>
-          </div>
-        </div>
-
-        <!-- Pipeline stepper -->
-        <div class="pipeline-stepper" id="analysis-stepper" style="display:none">
-          <div class="pipeline-step" id="pstep-preprocessing">
-            <div class="pstep-circle">🔬</div>
-            <div class="pstep-label">Preprocessing</div>
-            <div class="pstep-status">—</div>
-          </div>
-          <div class="pipeline-step" id="pstep-detection">
-            <div class="pstep-circle">🔍</div>
-            <div class="pstep-label">Detection</div>
-            <div class="pstep-status">—</div>
-          </div>
-          <div class="pipeline-step" id="pstep-change">
-            <div class="pstep-circle">🗺️</div>
-            <div class="pstep-label">Change Det.</div>
-            <div class="pstep-status">—</div>
-          </div>
-          <div class="pipeline-step" id="pstep-prediction">
-            <div class="pstep-circle">📊</div>
-            <div class="pstep-label">Prediction</div>
-            <div class="pstep-status">—</div>
-          </div>
-          <div class="pipeline-step" id="pstep-xai">
-            <div class="pstep-circle">🧠</div>
-            <div class="pstep-label">XAI</div>
-            <div class="pstep-status">—</div>
-          </div>
-        </div>
-
-        <!-- Analysis results -->
-        <div class="analysis-results" id="analysis-results" style="display:none">
-          <!-- Progress & Delay -->
-          <div class="result-card">
-            <div class="result-card-header">
-              <div class="result-card-icon">📊</div>
-              <div><div class="result-card-title">Progress & Schedule</div><div class="result-card-sub">Construction progress estimation and delay prediction</div></div>
-              <span class="badge badge-green result-card-status" id="res-schedule-badge">—</span>
-            </div>
-            <div class="result-card-body">
-              <div class="kpi-row">
-                <div class="kpi-card"><div class="kpi-value text-cyan" id="res-progress">—</div><div class="kpi-label">Progress Score</div></div>
-                <div class="kpi-card"><div class="kpi-value" id="res-delay">—</div><div class="kpi-label">Delay Prediction</div></div>
-                <div class="kpi-card"><div class="kpi-value" id="res-confidence">—</div><div class="kpi-label">AI Confidence</div></div>
-                <div class="kpi-card"><div class="kpi-value" id="res-risk">—</div><div class="kpi-label">Risk Level</div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Activity Detection -->
-          <div class="result-card">
-            <div class="result-card-header">
-              <div class="result-card-icon">🔍</div>
-              <div><div class="result-card-title">Activity Detection</div><div class="result-card-sub">Workers, vehicles, machinery & safety compliance</div></div>
-              <span class="badge badge-cyan result-card-status" id="res-detect-badge">—</span>
-            </div>
-            <div class="result-card-body">
-              <div class="kpi-row">
-                <div class="kpi-card"><div class="kpi-value text-cyan" id="res-detections">—</div><div class="kpi-label">Total Detections</div></div>
-                <div class="kpi-card"><div class="kpi-value text-green" id="res-compliance">—</div><div class="kpi-label">Safety Compliance</div></div>
-                <div class="kpi-card"><div class="kpi-value" id="res-detect-images">—</div><div class="kpi-label">Images Analyzed</div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Change Detection -->
-          <div class="result-card">
-            <div class="result-card-header">
-              <div class="result-card-icon">🗺️</div>
-              <div><div class="result-card-title">Change Detection</div><div class="result-card-sub">Construction changes between inspections</div></div>
-              <span class="badge badge-amber result-card-status" id="res-change-badge">—</span>
-            </div>
-            <div class="result-card-body">
-              <div class="kpi-row">
-                <div class="kpi-card"><div class="kpi-value text-amber" id="res-avg-change">—</div><div class="kpi-label">Avg Change</div></div>
-                <div class="kpi-card"><div class="kpi-value" id="res-pairs-analyzed">—</div><div class="kpi-label">Pairs Analyzed</div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- XAI -->
-          <div class="result-card">
-            <div class="result-card-header">
-              <div class="result-card-icon">🧠</div>
-              <div><div class="result-card-title">Explainable AI</div><div class="result-card-sub">GradCAM heatmaps and SHAP feature importance</div></div>
-              <span class="badge badge-purple result-card-status" id="res-xai-badge">—</span>
-            </div>
-            <div class="result-card-body">
-              <div class="heatmap-grid" id="res-heatmap-grid">
-                <p class="text-muted text-sm">Heatmaps generated after analysis completes.</p>
-              </div>
-              <div class="mt-12 flex gap-8">
-                <a class="btn btn-secondary btn-sm" id="res-download-report" href="#" target="_blank">📥 Download XAI Report (HTML)</a>
-                <button class="btn btn-ghost btn-sm" id="res-view-shap" onclick="switchTab('reports')">View Full Report →</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Empty -->
-        <div id="analysis-empty" class="empty-state">
+        <!-- Empty State (No inspection selected / No inspections created) -->
+        <div id="analysis-empty" class="empty-state" style="display:none">
           <div class="empty-icon">🤖</div>
-          <h3>No Analysis Yet</h3>
-          <p>Select an inspection and click "Run Complete AI Analysis Pipeline" to start.</p>
+          <h3>No Inspections Available</h3>
+          <p>Create an inspection and upload drone imagery to run AI progress assessment.</p>
+          <button class="btn btn-primary btn-sm" onclick="openNewInspectionModal()">Create Inspection</button>
         </div>
+
       </div>
 
       <!-- ── TAB: Timeline ──────────────────────────────────────── -->
@@ -793,12 +922,159 @@
 
       <!-- ── TAB: Reports ───────────────────────────────────────── -->
       <div class="tab-panel" id="tab-reports">
+
+        <!-- Construction Progress Evidence Report (Primary Research / Demonstration Output) -->
+        <div class="card mb-20" style="border:1px solid rgba(0,212,255,0.4);background:rgba(0,212,255,0.04);margin-bottom:20px">
+          <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:20px">📑</span>
+              <div>
+                <span class="card-title" style="color:var(--cyan);font-weight:800;letter-spacing:0.5px">CONSTRUCTION PROGRESS EVIDENCE REPORT</span>
+                <p style="font-size:12px;color:var(--text-secondary);margin:2px 0 0">
+                  Primary Research &amp; Reviewer Output (Sections A–I): Multi-temporal verification, activity detection, progress S-curve, delay analysis, and Explainable AI.
+                </p>
+              </div>
+            </div>
+            <div class="flex gap-8 flex-wrap items-center">
+              <button class="btn btn-primary btn-sm" id="btn-load-evidence-report" onclick="loadAndRenderEvidenceReport()">
+                <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"/></svg>
+                Generate / View Evidence Report
+              </button>
+              <a class="btn btn-secondary btn-sm" id="btn-open-evidence-report-html" href="#" target="_blank" title="Open Official Civil Engineering Inspection Report">
+                🌐 Open Official Report
+              </a>
+              <a class="btn btn-primary btn-sm" id="btn-download-evidence-report-html" href="#" download title="Download Authoritative Inspection Report (.html)">
+                📥 Download HTML Report
+              </a>
+              <a class="btn btn-ghost btn-sm" id="btn-download-evidence-report-json" href="#" target="_blank">
+                Export JSON
+              </a>
+            </div>
+          </div>
+          <div class="card-body" id="evidence-report-container" style="padding:16px">
+            <div class="empty-state" style="padding:24px">
+              <div class="empty-icon">📊</div>
+              <p>Click "Generate / View Evidence Report" to view the complete 9-section decision-support package.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Final Inspection Summary CTA -->
+        <div class="card mb-20" style="border:1px solid rgba(139,111,212,0.3);background:rgba(139,111,212,0.05)">
+          <div class="card-body" style="padding:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+            <div style="flex:1;min-width:240px">
+              <div style="font-size:13px;font-weight:700;margin-bottom:4px">📋 Final Inspection Summary Report</div>
+              <div style="font-size:12px;color:var(--text-secondary)">Generates a comprehensive project health assessment with key findings, schedule analysis, safety compliance, and actionable recommendations.</div>
+            </div>
+            <div class="flex gap-8 flex-wrap items-center">
+              <button class="btn btn-primary btn-sm" onclick="generateFinalSummaryAndShow()">
+                <svg width="13" height="13" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clip-rule="evenodd"/></svg>
+                Generate Summary
+              </button>
+              <a class="btn btn-secondary btn-sm" id="btn-reports-tab-open-html" href="#" target="_blank" title="Open Full Civil Engineering Report">🌐 Open Full Report</a>
+              <a class="btn btn-secondary btn-sm" id="btn-reports-tab-download-html" href="#" download title="Download Full Civil Engineering HTML Report">📥 Download HTML Report</a>
+              <button class="btn btn-ghost btn-sm" onclick="switchTab('decision')">View in Health Tab →</button>
+            </div>
+          </div>
+          <div id="reports-summary-panel" class="hidden" style="padding:0 16px 16px">
+            <div id="reports-summary-content"></div>
+          </div>
+        </div>
+
+        <!-- Inspection Reports List -->
         <div id="reports-list">
           <div class="empty-state">
             <div class="empty-icon">📄</div>
             <h3>No Reports Yet</h3>
             <p>Run AI Analysis to automatically generate inspection reports.</p>
             <button class="btn btn-primary" onclick="switchTab('analysis')">Run Analysis</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ── TAB: Results Center ────────────────────────────────── -->
+      <div class="tab-panel" id="tab-results">
+
+        <!-- QUALITATIVE RESULTS -->
+        <div class="card mb-24">
+          <div class="card-header">
+            <span class="card-title">Qualitative Results — Visual Evidence Chain</span>
+            <button class="btn btn-ghost btn-sm" onclick="loadResultsTab()">↻ Refresh</button>
+          </div>
+          <div class="card-body">
+            <p class="text-xs text-muted mb-12" style="margin-top:0">
+              Input data → AI intermediate results → final interpreted output. Each record includes
+              the system interpretation, confidence basis and known limitations.
+            </p>
+            <div id="qualitative-results-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px"></div>
+          </div>
+        </div>
+
+        <!-- QUANTITATIVE RESULTS -->
+        <div class="card mb-24">
+          <div class="card-header"><span class="card-title">Quantitative Results — A · Benchmark Evaluation</span></div>
+          <div class="card-body" id="quant-dataset-eval">
+            <div class="empty-state" style="padding:24px"><p>Loading…</p></div>
+          </div>
+        </div>
+
+        <div class="card mb-24">
+          <div class="card-header"><span class="card-title">Quantitative Results — B · Activity Detection Coverage</span></div>
+          <div class="card-body" id="quant-detection-stats">
+            <div class="empty-state" style="padding:24px"><p>Loading…</p></div>
+          </div>
+        </div>
+
+        <div class="card mb-24">
+          <div class="card-header"><span class="card-title">Quantitative Results — C · Project Inspection Metrics</span></div>
+          <div class="card-body" id="quant-project-metrics">
+            <div class="empty-state" style="padding:24px"><p>Loading…</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TAB: Health & Explainable AI ───────────────────────── -->
+      <div class="tab-panel" id="tab-decision">
+
+        <!-- HEALTH SCORE -->
+        <div class="card mb-24">
+          <div class="card-header">
+            <span class="card-title">Project Health Score</span>
+            <button class="btn btn-ghost btn-sm" onclick="loadDecisionTab()">↻ Refresh</button>
+          </div>
+          <div class="card-body" id="health-score-body">
+            <div class="empty-state" style="padding:24px"><p>Loading…</p></div>
+          </div>
+        </div>
+
+        <!-- FINAL INSPECTION SUMMARY -->
+        <div class="card mb-24">
+          <div class="card-header">
+            <span class="card-title">Final Inspection Summary</span>
+            <div class="flex gap-8 flex-wrap items-center">
+              <button class="btn btn-primary btn-sm" onclick="generateFinalSummary()">Generate / Update Summary</button>
+              <a class="btn btn-secondary btn-sm" id="btn-decision-open-report" href="#" target="_blank" title="Open Full Civil Engineering Report">🌐 Open Full Report</a>
+              <a class="btn btn-ghost btn-sm" id="btn-download-summary" href="#" target="_blank" title="Download Full Inspection Report HTML">📥 Download HTML Report</a>
+            </div>
+          </div>
+          <div class="card-body" id="final-summary-body">
+            <div class="empty-state" style="padding:24px">
+              <div class="empty-icon">📋</div>
+              <p>No summary generated yet. Click "Generate / Update Summary".</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- XAI QUERY CENTER -->
+        <div class="card mb-24">
+          <div class="card-header"><span class="card-title">Explainable AI Query Center</span></div>
+          <div class="card-body">
+            <p class="text-xs text-muted mb-12" style="margin-top:0">
+              Structured answers always include: finding · explanation · evidence · confidence · limitations · recommendation.
+            </p>
+            <div class="flex gap-8 flex-wrap" id="xai-query-buttons" style="margin-bottom:16px"></div>
+            <div id="xai-query-result"></div>
           </div>
         </div>
       </div>
@@ -893,22 +1169,22 @@
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════
-         AI MODELS PAGE (preserved original module pages)
+         EVALUATION DATASETS PAGE
          ═══════════════════════════════════════════════════════════ -->
     <section class="page" id="page-ai-models">
       <div class="section-header">
-        <div><h2 class="section-title">AI Model Datasets</h2><p class="section-sub">Manage training datasets and run module-level operations</p></div>
+        <div><h2 class="section-title">Evaluation Datasets</h2><p class="section-sub">Manage reference datasets and run batch analysis operations</p></div>
       </div>
 
       <!-- Sub-tabs for the original module pages -->
       <div class="workspace-tabs mb-24" id="ai-model-tabs">
-        <button class="workspace-tab active" data-aitab="levir">LEVIR-CD Dataset</button>
-        <button class="workspace-tab" data-aitab="roboflow">Roboflow Dataset</button>
+        <button class="workspace-tab active" data-aitab="levir">Change Analysis Reference Data</button>
+        <button class="workspace-tab" data-aitab="roboflow">Activity Detection Dataset</button>
         <button class="workspace-tab" data-aitab="processing">Image Processing</button>
         <button class="workspace-tab" data-aitab="logs">System Logs</button>
       </div>
 
-      <!-- LEVIR-CD -->
+      <!-- Change Analysis Reference Data -->
       <div class="tab-panel active" id="aitab-levir">
         <div class="stats-grid" style="margin-bottom:20px">
           <div class="stat-card"><div class="stat-icon cyan"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"/></svg></div><div class="stat-body"><div class="stat-value" id="levir-stat-total">—</div><div class="stat-label">Total Pairs</div></div></div>
@@ -930,14 +1206,14 @@
           </div>
           <div class="card-body">
             <div class="gallery-grid" id="levir-pairs-grid">
-              <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🗂️</div><p>Click Refresh to load LEVIR-CD pairs</p></div>
+              <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🗂️</div><p>Click Refresh to load change analysis pairs</p></div>
             </div>
             <div class="pagination" id="levir-pagination"></div>
           </div>
         </div>
       </div>
 
-      <!-- Roboflow -->
+      <!-- Activity Detection Dataset -->
       <div class="tab-panel" id="aitab-roboflow">
         <div class="grid-2 mb-16">
           <div class="card"><div class="card-header"><span class="card-title">📊 Dataset Statistics</span></div><div class="card-body" id="roboflow-stats"><div class="empty-state" style="padding:24px"><p>Click Refresh to load</p></div></div></div>
@@ -982,7 +1258,7 @@
             </div>
           </div>
           <div class="card">
-            <div class="card-header"><span class="card-title">LEVIR-CD Pair Processing</span></div>
+            <div class="card-header"><span class="card-title">Change Pair Analysis</span></div>
             <div class="card-body">
               <div class="form-group">
                 <label class="form-label">Split</label>
@@ -996,7 +1272,7 @@
                 <label class="form-label">Pairs to Process (max 10)</label>
                 <input class="form-input" type="number" id="levir-process-limit" value="3" min="1" max="10" />
               </div>
-              <button class="btn btn-primary w-full" onclick="runLevirProcessing()">▶ Process LEVIR Pairs</button>
+              <button class="btn btn-primary w-full" onclick="runLevirProcessing()">▶ Process Change Pairs</button>
             </div>
           </div>
         </div>
@@ -1097,22 +1373,32 @@
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Start Date</label>
+          <label class="form-label">Start Date *</label>
           <input type="date" id="modal-project-start" class="form-input" />
         </div>
         <div class="form-group">
-          <label class="form-label">Planned Duration (days)</label>
-          <input type="number" id="modal-project-duration" class="form-input" placeholder="365" value="365" />
+          <label class="form-label">Expected End Date *</label>
+          <input type="date" id="modal-project-end-date" class="form-input" />
         </div>
       </div>
       <div class="form-row">
         <div class="form-group">
+          <label class="form-label">Project Manager</label>
+          <input type="text" id="modal-project-manager" class="form-input" placeholder="Project manager name" />
+        </div>
+        <div class="form-group">
           <label class="form-label">Client</label>
           <input type="text" id="modal-project-client" class="form-input" placeholder="Client name" />
         </div>
+      </div>
+      <div class="form-row">
         <div class="form-group">
           <label class="form-label">Contractor</label>
           <input type="text" id="modal-project-contractor" class="form-input" placeholder="Contractor name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color:var(--text-muted);font-size:11px">Planned Duration (auto-calculated)</label>
+          <input type="number" id="modal-project-duration" class="form-input" placeholder="Auto from dates" readonly style="background:var(--bg-secondary);opacity:0.7" />
         </div>
       </div>
     </div>
@@ -1203,9 +1489,10 @@
   <div class="modal modal-xl">
     <div class="modal-header">
       <h3 class="modal-title" id="report-modal-title">Inspection Report</h3>
-      <div class="flex gap-8">
-        <a class="btn btn-secondary btn-sm" id="btn-download-report-html" href="#" target="_blank">📥 HTML</a>
-        <button class="modal-close" onclick="closeModal('modal-report')">✕</button>
+      <div class="flex gap-8 items-center">
+        <a class="btn btn-primary btn-sm" id="btn-modal-open-report-html" href="#" target="_blank" title="Open Full Civil Engineering Report in new tab">🌐 Open Full Official Report</a>
+        <a class="btn btn-secondary btn-sm" id="btn-download-report-html" href="#" download title="Download HTML Report file">📥 Download HTML</a>
+        <button class="modal-close" onclick="closeModal('modal-report')" aria-label="Close modal">✕</button>
       </div>
     </div>
     <div class="modal-body" id="report-modal-body" style="max-height:70vh;overflow-y:auto">
@@ -1214,10 +1501,30 @@
   </div>
 </div>
 
+<!-- Analysis Details Modal (9-Stage Compact Verification View) -->
+<div class="modal-overlay hidden" id="modal-analysis-details">
+  <div class="modal modal-lg" style="max-height:85vh;display:flex;flex-direction:column">
+    <div class="modal-header">
+      <div>
+        <h3 class="modal-title">AI Analysis Pipeline Details</h3>
+        <div class="text-xs text-muted" style="margin-top:2px">9-stage automated verification and evidence records</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('modal-analysis-details')" aria-label="Close modal">✕</button>
+    </div>
+    <div class="modal-body" id="analysis-details-modal-body" style="max-height:65vh;overflow-y:auto;padding:16px 20px;flex:1">
+      <!-- 9 compact stage cards rendered dynamically -->
+    </div>
+    <div class="modal-footer" style="display:flex;justify-content:space-between;align-items:center">
+      <span class="text-xs text-muted">Zero-Fabrication Traceable Pipeline Standard</span>
+      <button class="btn btn-secondary btn-sm" onclick="closeModal('modal-analysis-details')">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- Toast container -->
 <div class="toast-container" id="toast-container"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<script src="js/app.js"></script>
+<script src="js/app.js?v=2.1.1"></script>
 </body>
 </html>

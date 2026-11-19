@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 1: UAV Image Acquisition — Package Init
-IEEE M.Tech Project
+Final Year Project
 """
 
 from backend.modules.module1_acquisition.uploader     import process_upload_batch, save_uploaded_file

@@ -1,4 +1,4 @@
-"""
-Project-wide utility helpers — IEEE M.Tech Project
+﻿"""
+Project-wide utility helpers — Final Year Project
 Explainable Vision-Based Construction Progress Assessment
 """

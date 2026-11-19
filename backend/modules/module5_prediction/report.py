@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 5: Progress Report Generator
-IEEE M.Tech Project — Explainable Vision-Based Construction Progress Assessment
+Final Year Project — Explainable Vision-Based Construction Progress Assessment
 
 Generates a structured JSON progress report combining:
   - Module 5 prediction results (progress score, delay, risk)
@@ -12,7 +12,7 @@ Generates a structured JSON progress report combining:
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -94,7 +94,7 @@ def generate_progress_report(
     report = {
         "module":             "Module 5: Delay Prediction & Progress Assessment",
         "report_type":        "Construction Progress Assessment Report",
-        "generated_at":       datetime.utcnow().isoformat() + "Z",
+        "generated_at":       datetime.now(timezone.utc).isoformat(),
         "project": {
             "project_id":    project_id,
             "name":          project_name,

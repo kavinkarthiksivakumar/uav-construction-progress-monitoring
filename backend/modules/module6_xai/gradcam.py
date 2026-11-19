@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 6 — GradCAM Heatmap Generator
-IEEE M.Tech Project — Explainable Vision-Based Construction Progress Assessment
+Final Year Project — Explainable Vision-Based Construction Progress Assessment
 
 Generates Gradient-weighted Class Activation Maps (GradCAM) for construction
 imagery to explain which image regions contribute to model predictions.
@@ -22,7 +22,7 @@ Pipeline:
 import logging
 import math
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -259,7 +259,7 @@ def generate_gradcam_heatmap(
         "method":       "GradCAM",
         "label":        label,
         "success":      False,
-        "generated_at": datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.now(timezone.utc).isoformat(),
     }
 
     try:
@@ -372,5 +372,5 @@ def generate_gradcam_batch(
         "failed":             failed,
         "results":            results,
         "avg_mean_activation": round(sum(all_acts) / len(all_acts), 4) if all_acts else 0.0,
-        "generated_at":       datetime.utcnow().isoformat() + "Z",
+        "generated_at":       datetime.now(timezone.utc).isoformat(),
     }

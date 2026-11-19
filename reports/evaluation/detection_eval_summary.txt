@@ -1,0 +1,70 @@
+Module 3: Detection Evaluation Summary
+============================================================
+Generated : 2026-09-22T17:22:04.838081+00:00
+Mode      : Simulation (reading YOLO ground-truth labels as detections)
+
+Split: train
+  Images processed    : 2603
+  Images with labels  : 2603
+  Total detections    : 37378
+  Avg det/image       : 14.36
+  Compliance rate     : 10.4%
+  Class counts:
+    Person              : 9691
+    machinery           : 5238
+    NO-Safety Vest      : 3957
+    Hardhat             : 3362
+    NO-Mask             : 3209
+    Safety Cone         : 3170
+    Safety Vest         : 3156
+    NO-Hardhat          : 2318
+    Mask                : 1743
+    vehicle             : 1534
+
+Split: valid
+  Images processed    : 114
+  Images with labels  : 114
+  Total detections    : 697
+  Avg det/image       : 6.11
+  Compliance rate     : 35.1%
+  Class counts:
+    Person              : 166
+    NO-Safety Vest      : 106
+    Hardhat             : 79
+    NO-Mask             : 74
+    NO-Hardhat          : 69
+    machinery           : 55
+    Safety Cone         : 44
+    vehicle             : 42
+    Safety Vest         : 41
+    Mask                : 21
+
+Split: test
+  Images processed    : 82
+  Images with labels  : 82
+  Total detections    : 760
+  Avg det/image       : 9.27
+  Compliance rate     : 36.6%
+  Class counts:
+    Person              : 174
+    Hardhat             : 110
+    Safety Cone         : 92
+    NO-Safety Vest      : 90
+    NO-Mask             : 79
+    Safety Vest         : 61
+    machinery           : 44
+    vehicle             : 41
+    NO-Hardhat          : 41
+    Mask                : 28
+
+Overall Class Counts (all splits combined):
+  Person              : 10031
+  machinery           : 5337
+  NO-Safety Vest      : 4153
+  Hardhat             : 3551
+  NO-Mask             : 3362
+  Safety Cone         : 3306
+  Safety Vest         : 3258
+  NO-Hardhat          : 2428
+  Mask                : 1792
+  vehicle             : 1617

@@ -1,10 +1,19 @@
 """
-Central Configuration for IEEE M.Tech Project
-Explainable Vision-Based Construction Progress Assessment
+Central Configuration for UAV Vision
+AI-Powered Construction Monitoring and Progress Assessment System
 
 Dataset locations are configured via environment variables in .env:
-  LEVIR_CD_PATH  : Path to LEVIR-CD bi-temporal change detection dataset
-  ROBOFLOW_PATH  : Path to Roboflow construction safety dataset
+  LEVIR_CD_PATH  : Path to LEVIR-CD+ bi-temporal change detection dataset
+                   Structure: {train,test}/{A,B,label}/
+  SYSU_CD_PATH   : Path to SYSU-CD bi-temporal change detection dataset
+                   Structure: {train,val,test}/{time1,time2,label}/
+  ROBOFLOW_PATH  : Path to Roboflow Construction Site Safety dataset
+                   Structure: {train,valid,test}/{images,labels}/ + data.yaml
+                   Classes (10): Hardhat, Mask, NO-Hardhat, NO-Mask,
+                                 NO-Safety Vest, Person, Safety Cone,
+                                 Safety Vest, machinery, vehicle
+
+Paths may be relative (resolved from project root) or absolute.
 """
 
 import os
@@ -26,6 +35,7 @@ PROCESSED_M3_DIR = BASE_DIR / "processed" / "module3"
 PROCESSED_M4_DIR = BASE_DIR / "processed" / "module4"
 PROCESSED_M5_DIR = BASE_DIR / "processed" / "module5"
 PROCESSED_M6_DIR = BASE_DIR / "processed" / "module6"
+PROCESSED_M7_DIR = BASE_DIR / "processed" / "module7_decision"
 METADATA_DIR     = BASE_DIR / "metadata"
 LOGS_DIR         = BASE_DIR / "logs"
 REPORTS_DIR      = BASE_DIR / "reports"
@@ -33,17 +43,50 @@ DATASETS_DIR     = BASE_DIR / "datasets"
 MODELS_DIR       = BASE_DIR / "models"
 FRONTEND_DIR     = BASE_DIR / "frontend"
 
+
+def _resolve_dataset_path(env_key: str, fallback: Path) -> Path:
+    """
+    Resolve a dataset path from an environment variable.
+    Supports both absolute paths and relative paths (resolved from BASE_DIR).
+    Falls back to ``fallback`` if the env var is not set or is empty.
+    """
+    raw = os.getenv(env_key, "").strip()
+    if not raw:
+        return fallback
+    p = Path(raw)
+    if p.is_absolute():
+        return p
+    # Relative path — resolve from project root
+    return (BASE_DIR / p).resolve()
+
+
 # ─────────────────────────────────────────────────────────────────
-# External Dataset Paths (configured via environment variables in .env)
+# External Dataset Paths (configured via environment variables)
 # ─────────────────────────────────────────────────────────────────
-LEVIR_CD_ROOT   = os.getenv("LEVIR_CD_PATH",   "")
-ROBOFLOW_ROOT   = os.getenv("ROBOFLOW_PATH",   "")
+LEVIR_CD_ROOT = _resolve_dataset_path(
+    "LEVIR_CD_PATH",
+    DATASETS_DIR / "levir" / "LEVIR-CD+" / "LEVIR-CD+",
+)
+
+SYSU_CD_ROOT = _resolve_dataset_path(
+    "SYSU_CD_PATH",
+    DATASETS_DIR / "sysu",
+)
+
+ROBOFLOW_ROOT = _resolve_dataset_path(
+    "ROBOFLOW_PATH",
+    DATASETS_DIR / "roboflow",
+)
+
+# Optional model weight paths
+YOLO_MODEL_PATH            = os.getenv("YOLO_MODEL_PATH", "")
+CHANGE_DETECTION_MODEL_PATH = os.getenv("CHANGE_DETECTION_MODEL_PATH", "")
 
 # ─────────────────────────────────────────────────────────────────
 # Flask Settings
 # ─────────────────────────────────────────────────────────────────
 SECRET_KEY          = os.getenv("SECRET_KEY", "change-this-secret-key-in-production")
-DEBUG               = os.getenv("DEBUG", "true").lower() == "true"
+DEBUG               = os.getenv("DEBUG", "false").lower() == "true"   # Default OFF for security
 HOST                = os.getenv("HOST", "0.0.0.0")
 PORT                = int(os.getenv("PORT", 5000))
 MAX_CONTENT_LENGTH  = int(os.getenv("MAX_CONTENT_LENGTH", 500 * 1024 * 1024))  # 500 MB
@@ -98,13 +141,27 @@ TEMPORAL = {
 }
 
 # ─────────────────────────────────────────────────────────────────
-# Dataset Paths
+# Dataset Paths Dictionary
 # ─────────────────────────────────────────────────────────────────
 DATASETS = {
-    "roboflow": Path(ROBOFLOW_ROOT),
-    "levir":    Path(LEVIR_CD_ROOT),
-    "sysu":     DATASETS_DIR / "sysu",
+    "roboflow": ROBOFLOW_ROOT,
+    "levir":    LEVIR_CD_ROOT,
+    "sysu":     SYSU_CD_ROOT,
 }
+
+# ─────────────────────────────────────────────────────────────────
+# Roboflow Dataset — Actual 10 Classes (from data.yaml)
+# ─────────────────────────────────────────────────────────────────
+# Classes indexed 0–9 as declared in data.yaml:
+#   0: Hardhat, 1: Mask, 2: NO-Hardhat, 3: NO-Mask, 4: NO-Safety Vest,
+#   5: Person, 6: Safety Cone, 7: Safety Vest, 8: machinery, 9: vehicle
+ROBOFLOW_CLASSES = [
+    "Hardhat", "Mask", "NO-Hardhat", "NO-Mask", "NO-Safety Vest",
+    "Person", "Safety Cone", "Safety Vest", "machinery", "vehicle",
+]
+ROBOFLOW_SAFE_CLASSES  = {"Hardhat", "Safety Vest", "Mask"}
+ROBOFLOW_RISK_CLASSES  = {"NO-Hardhat", "NO-Mask", "NO-Safety Vest"}
+ROBOFLOW_ACTIVITY_CLASSES = {"machinery", "vehicle", "Person", "Safety Cone"}
 
 # ─────────────────────────────────────────────────────────────────
 # Module 2 Processing Settings
@@ -120,21 +177,31 @@ MODULE2 = {
     "lbp_points":           24,
     "color_spaces":         ["RGB", "HSV", "LAB", "GRAY"],
     "change_threshold":     30,            # Pixel diff threshold for change map
-    "levir_splits":         ["train", "val", "test"],
+    # LEVIR-CD structure: {split}/{A,B,label}/
+    "levir_splits":         ["train", "test"],
     "levir_subdirs":        ["A", "B", "label"],
-    "roboflow_classes":     ["helmet", "no-helmet", "no-vest", "person", "vest"],
+    # SYSU-CD structure: {split}/{time1,time2,label}/
+    "sysu_splits":          ["train", "val", "test"],
+    "sysu_subdirs":         ["time1", "time2", "label"],
+    # Roboflow structure: {split}/{images,labels}/
+    "roboflow_classes":     ROBOFLOW_CLASSES,
     "roboflow_splits":      ["train", "valid", "test"],
     "preview_limit":        20,            # Max pairs to load for UI preview
 }
 
 # ─────────────────────────────────────────────────────────────────
-# Module 3 Processing Settings
+# Module 3 Processing Settings — 10-class Roboflow dataset
 # ─────────────────────────────────────────────────────────────────
 MODULE3 = {
-    "classes":          ["helmet", "no-helmet", "no-vest", "person", "vest"],
+    # Actual 10 classes from datasets/roboflow/data.yaml
+    "classes":          ROBOFLOW_CLASSES,
+    "safe_classes":     list(ROBOFLOW_SAFE_CLASSES),
+    "risk_classes":     list(ROBOFLOW_RISK_CLASSES),
+    "activity_classes": list(ROBOFLOW_ACTIVITY_CLASSES),
     "conf_threshold":   0.40,              # Minimum detection confidence
     "iou_threshold":    0.45,              # NMS IoU threshold
-    "model_path":       None,              # Set to .pt path to enable YOLOv8
+    # Set to .pt path to enable real YOLOv8 inference
+    "model_path":       YOLO_MODEL_PATH if YOLO_MODEL_PATH else None,
     "save_viz":         True,              # Save annotated visualization PNG
     "max_batch_size":   50,               # Max images per batch call
     "compliance_threshold": 0.5,          # Site compliance fraction threshold
@@ -153,9 +220,14 @@ MODULE4 = {
     "blur_sigma":        1.5,              # Gaussian blur sigma
     "save_overlay":      True,             # save annotated overlay PNG
     "save_mask":         True,             # save binary change mask PNG
-    "model_path":        None,             # set to .onnx/.pth to use deep model
+    # Set to .onnx/.pth to use a trained deep change detection model
+    "model_path":        CHANGE_DETECTION_MODEL_PATH if CHANGE_DETECTION_MODEL_PATH else None,
     "max_batch_size":    20,               # max pairs per API call
-    "levir_splits":      ["train", "val", "test"],
+    # LEVIR-CD: train + test splits (no official val split)
+    "levir_splits":      ["train", "test"],
+    # SYSU-CD: train + val + test splits
+    "sysu_splits":       ["train", "val", "test"],
+    "evaluate_gt":       True,             # compute IoU/F1 against GT masks when available
 }
 
 # ─────────────────────────────────────────────────────────────────
@@ -163,8 +235,11 @@ MODULE4 = {
 # ─────────────────────────────────────────────────────────────────
 MODULE5 = {
     # Weights for composite progress score (must sum to 1.0)
+    # Methodology: weighted linear combination of sub-scores derived
+    # from Module 1–4 outputs. Each weight reflects the relative
+    # evidential strength of that signal for construction progress.
     "weights": {
-        "change":   0.40,   # Module 4 change detection contribution
+        "change":   0.40,   # Module 4 change detection contribution (strongest signal)
         "activity": 0.30,   # Module 3 activity detection contribution
         "temporal": 0.20,   # Module 1 temporal coverage contribution
         "quality":  0.10,   # Module 1 image quality contribution
@@ -176,6 +251,13 @@ MODULE5 = {
         "at_risk":  10,
         "delayed":  20,
         "critical": 35,
+    },
+    # Progress status labels based on deviation %
+    "status_thresholds": {
+        "ahead":    10,    # deviation >= +10% → Ahead of Schedule
+        "on_track": 0,     # deviation >= 0%  → On Schedule
+        "at_risk":  -10,   # deviation >= -10% → At Risk
+        # below -10% → Delayed
     },
 }
 
@@ -217,9 +299,8 @@ def ensure_directories():
     """Create all required directories if they do not exist."""
     dirs = [
         UPLOADS_DIR, PROCESSED_DIR, PROCESSED_M2_DIR, PROCESSED_M3_DIR, PROCESSED_M4_DIR,
-        PROCESSED_M5_DIR, PROCESSED_M6_DIR,
+        PROCESSED_M5_DIR, PROCESSED_M6_DIR, PROCESSED_M7_DIR,
         METADATA_DIR, LOGS_DIR, REPORTS_DIR, MODELS_DIR,
-        DATASETS_DIR / "sysu",
         BASE_DIR / "modules",
         BASE_DIR / "tests",
         BASE_DIR / "utils",
@@ -229,7 +310,8 @@ def ensure_directories():
         BASE_DIR / "processed" / "module4",
         BASE_DIR / "processed" / "module5",
         BASE_DIR / "processed" / "module6",
+        REPORTS_DIR / "evaluation",
+        REPORTS_DIR / "project_summaries",
     ]
     for d in dirs:
         d.mkdir(parents=True, exist_ok=True)
-

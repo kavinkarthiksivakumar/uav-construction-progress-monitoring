@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 3: Construction Activity Detection — Package Init
-IEEE M.Tech Project
+Final Year Project
 """
 
 from backend.modules.module3_detection.detector import (

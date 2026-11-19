@@ -1,6 +1,6 @@
-"""
+﻿"""
 Create Test Projects Script
-IEEE M.Tech Project — UAV Construction Progress Assessment
+Final Year Project — UAV Construction Progress Assessment
 
 This script programmatically sets up 5 different test projects with realistic data
 from the LEVIR-CD and Roboflow datasets. It copy-pastes sample images to project

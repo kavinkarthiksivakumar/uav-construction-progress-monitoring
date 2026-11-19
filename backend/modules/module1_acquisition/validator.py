@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 1: Image Validator
-IEEE M.Tech Project — UAV Image Acquisition
+Final Year Project — UAV Image Acquisition
 
 Validates uploaded UAV images for:
   - Supported file extension

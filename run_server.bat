@@ -1,23 +1,71 @@
 @echo off
-title UAV Vision — Construction Progress Assessment (All Modules)
+setlocal enabledelayedexpansion
+title UAV Vision — Server Launcher
+
+:: Set UTF-8 code page and Python environment variables
+chcp 65001 >nul
+set PYTHONIOENCODING=utf-8
+set PYTHONUTF8=1
 cd /d "%~dp0"
+
 echo.
 echo ============================================================
-echo  IEEE M.Tech Project
-echo  Explainable Vision-Based Construction Progress Assessment
+echo   UAV Vision: Construction Progress Assessment System
 echo ============================================================
 echo.
-echo  Module 1  : UAV Image Acquisition ^& Quality Assessment
-echo  Module 2  : Image Processing (LEVIR-CD + Roboflow)
-echo  Module 3  : Construction Activity Detection
-echo  Module 4  : Construction Change Detection
-echo  Module 5  : Delay Prediction ^& Progress Assessment
+
+:: Detect Python
+set "PY_CMD="
+
+py -3 -c "import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)" >nul 2>nul
+if !ERRORLEVEL! equ 0 (
+    set "PY_CMD=py -3"
+    goto :python_found
+)
+
+py -c "import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)" >nul 2>nul
+if !ERRORLEVEL! equ 0 (
+    set "PY_CMD=py"
+    goto :python_found
+)
+
+python -c "import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)" >nul 2>nul
+if !ERRORLEVEL! equ 0 (
+    set "PY_CMD=python"
+    goto :python_found
+)
+
+python3 -c "import sys; sys.exit(0 if sys.version_info >= (3, 9) else 1)" >nul 2>nul
+if !ERRORLEVEL! equ 0 (
+    set "PY_CMD=python3"
+    goto :python_found
+)
+
+echo [ERROR] No working Python 3.9+ found! Please install Python.
+pause
+exit /b 1
+
+:python_found
+:: Ensure .env exists if missing
+if not exist ".env" (
+    if exist ".env.example" (
+        copy /Y ".env.example" ".env" >nul
+        echo [INFO] Created .env configuration from .env.example
+    )
+)
+
+echo  Python: !PY_CMD!
 echo.
-echo  Open browser at: http://localhost:5000
+echo  ============================================================
+echo   Starting Server...
+echo   Local Dashboard : http://localhost:5000
+echo   Health API      : http://localhost:5000/api/v1/health
+echo   Press Ctrl+C to shutdown server
+echo  ============================================================
 echo.
-echo  Dataset paths : Configure LEVIR_CD_PATH and ROBOFLOW_PATH in .env
+
+!PY_CMD! backend\app.py
+
 echo.
-echo ============================================================
-echo.
-python backend\app.py
+echo Server has stopped.
 pause

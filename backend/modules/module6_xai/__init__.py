@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 6: Explainable AI (XAI) — GradCAM + SHAP + Report Generation
-IEEE M.Tech Project — Explainable Vision-Based Construction Progress Assessment
+Final Year Project — Explainable Vision-Based Construction Progress Assessment
 
 Exports:
     gradcam      — GradCAM heatmap generator

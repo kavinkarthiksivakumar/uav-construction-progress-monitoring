@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 2: Roboflow Construction Dataset Loader
-IEEE M.Tech Project — Image Processing
+Final Year Project — Image Processing
 
 Scans the Roboflow construction safety dataset.
 Dataset root is configured via the ROBOFLOW_PATH environment variable
@@ -12,7 +12,7 @@ Splits:  train / valid / test — each with images/ + labels/ subdirs
 
 import logging
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any
 
 logger = logging.getLogger("module2.roboflow_loader")
@@ -44,7 +44,7 @@ def scan_roboflow_dataset(root_path: str) -> Dict[str, Any]:
     result: Dict[str, Any] = {
         "root":       str(root),
         "available":  True,
-        "scanned_at": datetime.utcnow().isoformat() + "Z",
+        "scanned_at": datetime.now(timezone.utc).isoformat(),
         "classes":    CLASSES,
         "num_classes": len(CLASSES),
         "splits":     {},

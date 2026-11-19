@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 2: Image Processing — Package Init
-IEEE M.Tech Project
+Final Year Project
 """
 
 from backend.modules.module2_processing.processor       import (

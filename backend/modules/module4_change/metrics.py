@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 4: Change Metrics & Report Generator
-IEEE M.Tech Project — Construction Change Detection
+Final Year Project — Construction Change Detection
 
 Computes construction-domain metrics from change detection results:
   - Progress rate (change / total over time)
@@ -133,12 +133,12 @@ def generate_change_report(
     Returns:
         Path to the saved report.
     """
-    from datetime import datetime
+    from datetime import datetime, timezone
 
     metrics   = aggregate_batch_metrics(batch_result.get("results", []))
     report    = {
         "module":          "Module 4: Construction Change Detection",
-        "generated_at":    datetime.utcnow().isoformat() + "Z",
+        "generated_at":    datetime.now(timezone.utc).isoformat(),
         "summary":         metrics,
         "pair_results":    [
             {

@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 2: LEVIR-CD Dataset Loader
-IEEE M.Tech Project — Image Processing
+Final Year Project — Image Processing
 
 Scans and loads image pairs (A/B) and change masks (label) from the
 LEVIR-CD dataset. The dataset root path is configured via the
@@ -21,7 +21,7 @@ LEVIR-CD Structure:
 import logging
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Any, Optional
 
 logger = logging.getLogger("module2.levir_loader")
@@ -51,7 +51,7 @@ def scan_levir_dataset(root_path: str) -> Dict[str, Any]:
     result: Dict[str, Any] = {
         "root":      str(root),
         "available": True,
-        "scanned_at": datetime.utcnow().isoformat() + "Z",
+        "scanned_at": datetime.now(timezone.utc).isoformat(),
         "splits":    {},
         "total_pairs": 0,
         "summary":   {},

@@ -1,4 +1,4 @@
-"""
+﻿"""
 Bootstrap Environment Check Script
 Explainable Vision-Based Construction Progress Assessment
 """
@@ -124,7 +124,7 @@ def check_workspace():
 # ──────────────────────────────────────────────
 if __name__ == "__main__":
     print(f"\n{BOLD}{'='*60}{RESET}")
-    print(f"{BOLD}  IEEE M.Tech Project — Bootstrap Environment Check{RESET}")
+    print(f"{BOLD}  Final Year Project — Bootstrap Environment Check{RESET}")
     print(f"{BOLD}{'='*60}{RESET}")
 
     results = {

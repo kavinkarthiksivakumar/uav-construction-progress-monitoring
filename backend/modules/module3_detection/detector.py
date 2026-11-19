@@ -1,9 +1,12 @@
 """
 Module 3: Construction Activity Detector
-IEEE M.Tech Project — Construction Activity Detection
+Final Year Project — Construction Activity Detection
 
 Detects construction site activities and safety compliance in images using the
-Roboflow 5-class dataset (helmet, no-helmet, vest, no-vest, person).
+Roboflow Construction Site Safety dataset (10 classes from data.yaml).
+
+Classes (indices 0–9): Hardhat, Mask, NO-Hardhat, NO-Mask, NO-Safety Vest,
+                         Person, Safety Cone, Safety Vest, machinery, vehicle
 
 Operating Modes:
   1. Simulation Mode (default) — reads YOLO ground-truth label .txt files from
@@ -28,18 +31,25 @@ Pipeline:
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("module3.detector")
 
-# ─── Class definitions ─────────────────────────────────────────────────────────
-CLASSES      = ["helmet", "no-helmet", "no-vest", "person", "vest"]
-SAFE_CLASSES = {"helmet", "vest"}
-RISK_CLASSES = {"no-helmet", "no-vest"}
+# ─── Class definitions ──────────────────────────────────────────────
+# Actual 10 classes from datasets/roboflow/data.yaml (indices 0–9):
+#   0: Hardhat, 1: Mask, 2: NO-Hardhat, 3: NO-Mask, 4: NO-Safety Vest,
+#   5: Person, 6: Safety Cone, 7: Safety Vest, 8: machinery, 9: vehicle
+CLASSES = [
+    "Hardhat", "Mask", "NO-Hardhat", "NO-Mask", "NO-Safety Vest",
+    "Person", "Safety Cone", "Safety Vest", "machinery", "vehicle",
+]
+SAFE_CLASSES     = {"Hardhat", "Safety Vest", "Mask"}
+RISK_CLASSES     = {"NO-Hardhat", "NO-Mask", "NO-Safety Vest"}
+ACTIVITY_CLASSES = {"machinery", "vehicle", "Person", "Safety Cone"}
 
-# ─── Compliance thresholds ─────────────────────────────────────────────────────
+# ─── Compliance thresholds ────────────────────────────────────────────
 COMPLIANCE_THRESHOLD = 0.5   # fraction of workers with full PPE = compliant site
 
 
@@ -90,7 +100,7 @@ def detect_image(
         "compliance":    {},
         "viz_path":      None,
         "json_path":     None,
-        "detected_at":   datetime.utcnow().isoformat() + "Z",
+        "detected_at":   datetime.now(timezone.utc).isoformat(),
         "error":         None,
     }
 
@@ -124,12 +134,16 @@ def detect_image(
 
         avg_conf = round(sum(confidences) / len(confidences), 3) if confidences else 0.0
 
-        # Compliance analysis
-        persons    = class_counts.get("person",    0)
-        helmets    = class_counts.get("helmet",    0)
-        vests      = class_counts.get("vest",      0)
-        no_helmet  = class_counts.get("no-helmet", 0)
-        no_vest    = class_counts.get("no-vest",   0)
+        # Compliance analysis — keys must match the actual Roboflow 10-class scheme:
+        #   0: Hardhat, 1: Mask, 2: NO-Hardhat, 3: NO-Mask, 4: NO-Safety Vest,
+        #   5: Person, 6: Safety Cone, 7: Safety Vest, 8: machinery, 9: vehicle
+        persons    = class_counts.get("Person",    0) + class_counts.get("person",    0)
+        helmets    = class_counts.get("Hardhat",   0) + class_counts.get("helmet",   0)
+        masks      = class_counts.get("Mask",      0) + class_counts.get("mask",      0)
+        vests      = class_counts.get("Safety Vest", 0) + class_counts.get("vest",     0)
+        no_helmet  = class_counts.get("NO-Hardhat", 0) + class_counts.get("no-helmet", 0)
+        no_mask    = class_counts.get("NO-Mask",   0) + class_counts.get("no-mask",   0)
+        no_vest    = class_counts.get("NO-Safety Vest", 0) + class_counts.get("no-vest", 0)
 
         # Worker count is number of persons, or inferred from PPE/violations if person is not detected
         worker_count = persons if persons > 0 else max(helmets + no_helmet, vests + no_vest)
@@ -153,7 +167,7 @@ def detect_image(
             "total_workers":    worker_count,
             "safe_workers":     compliant_workers,
             "unsafe_workers":   worker_count - compliant_workers,
-            "violations":       no_helmet + no_vest,
+            "violations":       no_helmet + no_mask + no_vest,
         }
 
         # ── Visualization ───────────────────────────────────────────────────

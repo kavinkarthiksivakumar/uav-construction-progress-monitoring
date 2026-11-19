@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 1: Image Preprocessor
-IEEE M.Tech Project — UAV Image Acquisition
+Final Year Project — UAV Image Acquisition
 
 Preprocessing pipeline:
   1. Resize to target dimensions (maintain aspect ratio with padding)
@@ -13,7 +13,7 @@ Preprocessing pipeline:
 import logging
 import numpy as np
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Any, Tuple, Optional
 
 logger = logging.getLogger("module1.preprocessor")
@@ -231,7 +231,7 @@ def preprocess_image(
         "original_size": None,
         "processed_size": None,
         "error":         None,
-        "processed_at":  datetime.utcnow().isoformat() + "Z",
+        "processed_at":  datetime.now(timezone.utc).isoformat(),
     }
 
     try:

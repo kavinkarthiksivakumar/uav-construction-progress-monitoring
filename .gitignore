@@ -107,3 +107,24 @@ node_modules/
 # ------------------------------------------------------------
 reports/*.pdf
 reports/master_validation_report.json
+
+# ------------------------------------------------------------
+# 13. Binaries, media, papers & presentation artifacts
+# ------------------------------------------------------------
+*.docx
+*.pdf
+*.pptx
+*.mp4
+(3/
+(3
+extracted_images/
+scratch/
+gpu_test/
+sample_images/
+reports/sourcecode-proj.txt
+reports/chapter8_sourcecode/
+reports/pytest_report.xml
+reports/sample_project_assessment/
+datasets/roboflow/
+datasets/output_video3.mp4
+research-019_claude_code.txt

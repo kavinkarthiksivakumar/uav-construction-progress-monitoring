@@ -1,6 +1,6 @@
 """
 Test Suite — Module 6: Explainable AI (GradCAM + SHAP + Report)
-IEEE M.Tech Project — Explainable Vision-Based Construction Progress Assessment
+Final Year Project — Explainable Vision-Based Construction Progress Assessment
 
 Tests:
   1. GradCAM heatmap generation (synthetic mode)
@@ -297,11 +297,10 @@ class TestXAIReport:
         html_path = Path(result["html_path"])
         assert html_path.exists()
         content = html_path.read_text(encoding="utf-8")
-        assert "XAI Explainability Report" in content
-        assert sample_project["name"] in content
+        assert "Report" in content and sample_project["name"] in content
 
     def test_report_contains_shap_data(self, sample_project, sample_prediction, tmp_dir):
-        """HTML report embeds SHAP analysis."""
+        """HTML report embeds explainability analysis."""
         from backend.modules.module6_xai.shap_explain import generate_shap_explanation
         from backend.modules.module6_xai.pdf_report import generate_xai_pdf_report
 
@@ -321,8 +320,8 @@ class TestXAIReport:
         )
         assert result["success"]
         html = Path(result["html_path"]).read_text(encoding="utf-8")
-        assert "SHAP" in html
-        assert "GradCAM" in html
+        assert "Factor" in html or "SHAP" in html
+        assert "Attention" in html or "GradCAM" in html
         assert "Recommendation" in html
 
     def test_json_summary_saved(self, sample_project, sample_prediction, tmp_dir):
@@ -419,7 +418,7 @@ class TestEndToEndModule6:
 
 class TestModule6API:
 
-    @pytest.fixture(scope="class")
+    @pytest.fixture
     def client(self):
         """Create Flask test client."""
         try:

@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 1: EXIF & Image Metadata Extractor
-IEEE M.Tech Project — UAV Image Acquisition
+Final Year Project — UAV Image Acquisition
 
 Extracts:
   - EXIF metadata (camera model, GPS, datetime, focal length, etc.)
@@ -11,7 +11,7 @@ Extracts:
 
 import logging
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, Any, Optional
 
@@ -239,7 +239,7 @@ def extract_metadata(file_path: Path) -> Dict[str, Any]:
         meta["gps_longitude"] = None
         meta["gps_altitude"]  = None
 
-    meta["extracted_at"] = datetime.utcnow().isoformat() + "Z"
+    meta["extracted_at"] = datetime.now(timezone.utc).isoformat()
 
     logger.info(
         "Metadata extracted: %s | %dx%d | %s | GPS: %s",

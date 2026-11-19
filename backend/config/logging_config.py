@@ -1,5 +1,5 @@
 """
-Logging Configuration for IEEE M.Tech Project
+Logging Configuration for UAV Vision Construction Monitoring System
 Sets up rotating file handlers and console logging for all modules.
 """
 

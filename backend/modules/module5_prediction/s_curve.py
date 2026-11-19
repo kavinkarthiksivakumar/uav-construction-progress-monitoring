@@ -1,6 +1,6 @@
-"""
+﻿"""
 Module 5: S-Curve Builder
-IEEE M.Tech Project — Explainable Vision-Based Construction Progress Assessment
+Final Year Project — Explainable Vision-Based Construction Progress Assessment
 
 Generates S-curve data (planned vs actual cumulative progress) for charting.
 
@@ -24,7 +24,7 @@ Output format (list of data points):
 
 import logging
 import math
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger("module5.s_curve")
@@ -148,7 +148,7 @@ def build_s_curve_data(
         try:
             start_dt = datetime.fromisoformat(planned_start.replace("Z", "+00:00"))
         except Exception:
-            start_dt = image_dates[0] if image_dates else datetime.utcnow()
+            start_dt = image_dates[0] if image_dates else datetime.now(timezone.utc)
     elif has_dates and image_dates:
         start_dt = image_dates[0]
     else:
