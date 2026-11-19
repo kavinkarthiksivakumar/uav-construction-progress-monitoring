@@ -128,3 +128,15 @@ reports/sample_project_assessment/
 datasets/roboflow/
 datasets/output_video3.mp4
 research-019_claude_code.txt
+research-019_paper_text.txt
+generate_research019.py
+powershell.bat
+push_to_github.bat
+create_new_repo_push.bat
+
+# Bulk evaluation prediction outputs (keep summaries only)
+reports/evaluation/levir_predictions/
+reports/evaluation/sysu_predictions/
+
+# Sample test images (large runtime images)
+sample_images/
